@@ -228,4 +228,15 @@ results/generated-pdfs/
 python/
 set/
 
+# Keep results folder structure, ignore generated files
+results/generated-pdfs/*
+!results/generated-pdfs/.gitkeep
 
+results/test-reports/*
+!results/test-reports/.gitkeep
+
+results/metrics/*
+!results/metrics/.gitkeep
+
+results/diffs/*
+!results/diffs/.gitkeep
