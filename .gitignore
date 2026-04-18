@@ -226,15 +226,20 @@ __pycache__/
 python/
 set/
 
-# Keep results folder structure, ignore generated files
-results/generated-pdfs/*
-!results/generated-pdfs/.gitkeep
+# Results folder — allow generated outputs to be committed
+results/generated-pdfs/*.pdf
+!results/generated-pdfs/*.pdf
 
-results/test-reports/*
-!results/test-reports/.gitkeep
+results/test-reports/*.html
+!results/test-reports/*.html
 
-results/metrics/*
-!results/metrics/.gitkeep
+results/metrics/*.json
+!results/metrics/*.json
+
+results/metrics/*.csv
+!results/metrics/*.csv
 
 results/diffs/*
-!results/diffs/.gitkeep
+!results/diffs/*
+
+!results/**/.gitkeep
