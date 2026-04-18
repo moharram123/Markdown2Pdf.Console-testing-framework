@@ -1,23 +1,20 @@
 # FastAPI
 
-FastAPI is a modern, fast (high-performance), web framework for building APIs
-with Python based on standard Python type hints.
+FastAPI is a modern high-performance web framework for building APIs with Python based on standard Python type hints.
 
 ## Introduction
 
-FastAPI is one of the fastest Python frameworks available, on par with NodeJS and Go.
-It was designed to be easy to use, while also being production-ready and capable of
-handling high-performance workloads.
+FastAPI is one of the fastest Python frameworks available on par with NodeJS and Go. It is built on top of Starlette and Pydantic and designed for production-ready workloads.
 
 ## Features
 
-- First item: Fast to code — increase development speed by 200% to 300%
-- Second item: Fewer bugs — reduce about 40% of human induced errors
-- Third item: Intuitive — great editor support with autocompletion everywhere
-- Fourth item: Easy — designed to be easy to use and learn
-- Fifth item: Short — minimizes code duplication
-- Sixth item: Robust — get production-ready code with automatic interactive docs
-- Seventh item: Standards-based — based on OpenAPI and JSON Schema
+- First item: Fast to code increases development speed by 200 to 300 percent
+- Second item: Fewer bugs reduces about 40 percent of human induced errors
+- Third item: Intuitive with great editor support and autocompletion
+- Fourth item: Easy to use and designed for quick learning
+- Fifth item: Short code minimizes duplication across the codebase
+- Sixth item: Robust with production-ready automatic interactive docs
+- Seventh item: Standards-based on OpenAPI and JSON Schema
 
 ## Usage
 
@@ -37,15 +34,14 @@ def create_api():
     print("app = FastAPI()")
     def add_route():
         print("@app.get('/')")
-        print("def read_root(): return {'Hello': 'World'}")
+        print("def read_root(): return Hello World")
 ```
 
 JavaScript client example:
 
 ```javascript
 function fetchData() {
-    console.log("fetch('http://127.0.0.1:8000/items/5')");
-    console.log(".then(response => response.json())");
+    console.log("fetch http://127.0.0.1:8000/items/5");
 }
 ```
 
@@ -68,9 +64,9 @@ function fetchData() {
 
 ## Interactive Documentation
 
-- First item: Swagger UI — available at /docs for interactive exploration
-- Second item: ReDoc — available at /redoc for alternative documentation
-- Third item: OpenAPI JSON — available at /openapi.json for schema
+- First item: Swagger UI available at /docs
+- Second item: ReDoc available at /redoc
+- Third item: OpenAPI JSON available at /openapi.json
 
 ## Type System
 
@@ -78,9 +74,7 @@ function fetchData() {
 def typed_endpoint():
     print("from pydantic import BaseModel")
     def model():
-        print("class Item(BaseModel):")
-        print("    name: str")
-        print("    price: float")
+        print("class Item(BaseModel): name str, price float")
 ```
 
 ## Security
@@ -90,14 +84,13 @@ def security_example():
     print("from fastapi.security import OAuth2PasswordBearer")
     def verify():
         print("async def get_current_user(token: str):")
-        print("    print('Verifying token...')")
 ```
 
 ## Community
 
-- First item: GitHub Discussions — ask questions and share ideas
-- Second item: Discord — join the FastAPI community
-- Third item: Twitter — follow @tiangolo for updates
+- First item: GitHub Discussions for questions and ideas
+- Second item: Discord for the FastAPI community
+- Third item: Twitter follow tiangolo for updates
 
 ## Contributors
 

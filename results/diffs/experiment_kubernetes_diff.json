@@ -1,0 +1,53 @@
+{
+  "headings": {
+    "missing": [
+      "Kubernetes",
+      "Introduction",
+      "Features",
+      "Usage",
+      "Kubernetes Components",
+      "Governance",
+      "Community",
+      "Support",
+      "Security",
+      "Architecture"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "tables": {
+    "missing": [
+      "Alice",
+      "Bob",
+      "Carol",
+      "Dave",
+      "Admin"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "lists": {
+    "missing": [
+      "First item",
+      "Second item",
+      "Third item",
+      "Fourth item",
+      "Fifth item",
+      "Sixth item",
+      "Seventh item",
+      "Eighth item"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "codeblocks": {
+    "missing": [
+      "print(",
+      "def ",
+      "console.log"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "overall_match": false
+}

@@ -1,0 +1,40 @@
+{
+  "headings": {
+    "missing": [
+      "Oh My Zsh",
+      "Plugin Reference Table",
+      "Themes",
+      "Configuration",
+      "Community Contributors",
+      "Getting Help",
+      "Uninstalling"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "tables": {
+    "missing": [
+      "Carol",
+      "Dave"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "lists": {
+    "missing": [
+      "Fourth item",
+      "Fifth item",
+      "Sixth item",
+      "Seventh item",
+      "Eighth item"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "codeblocks": {
+    "missing": [],
+    "unexpected": [],
+    "match": true
+  },
+  "overall_match": false
+}

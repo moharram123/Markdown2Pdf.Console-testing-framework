@@ -1,0 +1,40 @@
+{
+  "headings": {
+    "missing": [
+      "FastAPI",
+      "Performance Benchmarks",
+      "Sponsors Table",
+      "Interactive Documentation",
+      "Type System",
+      "Security",
+      "Community",
+      "Contributors"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "tables": {
+    "missing": [
+      "Carol",
+      "Dave"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "lists": {
+    "missing": [
+      "Fourth item",
+      "Fifth item",
+      "Sixth item",
+      "Seventh item"
+    ],
+    "unexpected": [],
+    "match": false
+  },
+  "codeblocks": {
+    "missing": [],
+    "unexpected": [],
+    "match": true
+  },
+  "overall_match": false
+}
