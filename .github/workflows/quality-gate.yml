@@ -2,15 +2,20 @@ name: quality-gate
 
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci: update test results')"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -42,6 +47,7 @@ jobs:
           pytest tests --html=results/test-reports/report.html --self-contained-html
 
       - name: Debug results folder
+        if: always()
         run: |
           echo "=== RESULTS TREE ==="
           find results -maxdepth 3 -type f | sort
@@ -52,14 +58,14 @@ jobs:
         with:
           name: quality-gate-artifacts
           path: results/
-      
+
       - name: Commit results back to repo
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add results/
-          git diff --staged --quiet || git commit -m "ci: update test results [skip ci]"
+          git diff --staged --quiet || git commit -m "ci: update test results"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
