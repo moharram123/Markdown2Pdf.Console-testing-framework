@@ -1,0 +1,9 @@
+file,should_pass,actual_pass,duration_seconds
+control_headings.md,True,True,5.946
+control_tables.md,True,True,5.9386
+control_lists.md,True,True,5.9609
+control_codeblocks.md,True,True,5.9106
+missing_heading.md,False,False,5.9021
+missing_table_row.md,False,False,5.9413
+missing_list_item.md,False,False,5.9288
+missing_codeblock.md,False,False,5.9402
