@@ -134,7 +134,41 @@ TEST_CASES = [
         "baseline": DATA_DIR / "baselines" / "control_codeblocks.json",
         "expectations": {"codeblocks": ["print("]},
         "should_pass": False
-    }
+    },
+        {
+        "markdown": DATA_DIR / "experiments" / "experiment_kubernetes.md",
+        "baseline": DATA_DIR / "baselines" / "experiment_kubernetes.json",
+        "expectations": {
+            "headings": ["Kubernetes", "Introduction", "Features", "Usage", "Kubernetes Components", "Governance", "Community", "Support", "Security", "Architecture"],
+            "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
+            "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item", "Eighth item"],
+            "codeblocks": ["print(", "def ", "console.log"]
+        },
+        "should_pass": True
+    },
+    {
+        "markdown": DATA_DIR / "experiments" / "experiment_ohmyzsh.md",
+        "baseline": DATA_DIR / "baselines" / "experiment_ohmyzsh.json",
+        "expectations": {
+            "headings": ["Oh My Zsh", "Introduction", "Features", "Usage", "Plugin Reference Table", "Themes", "Configuration", "Community Contributors", "Getting Help", "Uninstalling"],
+            "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
+            "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item", "Eighth item"],
+            "codeblocks": ["print(", "def ", "console.log"]
+        },
+        "should_pass": True
+    },
+    {
+        "markdown": DATA_DIR / "experiments" / "experiment_fastapi.md",
+        "baseline": DATA_DIR / "baselines" / "experiment_fastapi.json",
+        "expectations": {
+            "headings": ["FastAPI", "Introduction", "Features", "Usage", "Performance Benchmarks", "Sponsors Table", "Interactive Documentation", "Type System", "Security", "Community", "Contributors"],
+            "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
+            "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item"],
+            "codeblocks": ["print(", "def ", "console.log"]
+        },
+        "should_pass": True
+    },
+
 ]
 
 

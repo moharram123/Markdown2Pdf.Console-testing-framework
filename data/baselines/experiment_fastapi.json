@@ -1,0 +1,6 @@
+{
+  "headings": ["FastAPI", "Introduction", "Features", "Usage", "Performance Benchmarks", "Sponsors Table", "Interactive Documentation", "Type System", "Security", "Community", "Contributors"],
+  "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
+  "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item"],
+  "codeblocks": ["print(", "def ", "console.log"]
+}
