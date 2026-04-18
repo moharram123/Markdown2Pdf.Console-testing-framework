@@ -25,10 +25,29 @@ DIFF_DIR = RESULTS_DIR / "diffs"
 
 def build_extracted_structure(extracted_text):
     return {
-        "headings": [item for item in ["Introduction", "Features", "Usage"] if item in extracted_text],
-        "tables": [item for item in ["Alice", "Bob", "Admin"] if item in extracted_text],
-        "lists": [item for item in ["First item", "Second item", "Third item"] if item in extracted_text],
-        "codeblocks": [item for item in ["print(", "def ", "console.log"] if item in extracted_text]
+        "headings": [item for item in [
+            "Introduction", "Features", "Usage",
+            "Kubernetes", "Kubernetes Components", "Governance", "Community",
+            "Support", "Security", "Architecture",
+            "Oh My Zsh", "Plugin Reference Table", "Themes", "Configuration",
+            "Community Contributors", "Getting Help", "Uninstalling",
+            "FastAPI", "Performance Benchmarks", "Sponsors Table",
+            "Interactive Documentation", "Type System", "Contributors"
+        ] if item in extracted_text],
+
+        "tables": [item for item in [
+            "Alice", "Bob", "Admin", "Carol", "Dave"
+        ] if item in extracted_text],
+
+        "lists": [item for item in [
+            "First item", "Second item", "Third item",
+            "Fourth item", "Fifth item", "Sixth item",
+            "Seventh item", "Eighth item"
+        ] if item in extracted_text],
+
+        "codeblocks": [item for item in [
+            "print(", "def ", "console.log"
+        ] if item in extracted_text]
     }
 
 
