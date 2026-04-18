@@ -6,8 +6,8 @@
   "regression_detection_accuracy": 1.0,
   "false_positive_rate": 0.0,
   "artifact_stability_note": "Measure by repeating control runs and checking identical verdicts.",
-  "avg_execution_time_seconds": 4.0734,
-  "total_automated_time_seconds": 44.8075,
+  "avg_execution_time_seconds": 5.9485,
+  "total_automated_time_seconds": 65.4337,
   "estimated_manual_time_seconds": 660,
-  "manual_time_reduction": 0.9321
+  "manual_time_reduction": 0.9009
 }
