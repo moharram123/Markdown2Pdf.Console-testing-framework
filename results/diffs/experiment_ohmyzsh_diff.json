@@ -1,11 +1,8 @@
 {
   "headings": {
     "missing": [],
-    "unexpected": [
-      "Community",
-      "Contributors"
-    ],
-    "match": false
+    "unexpected": [],
+    "match": true
   },
   "tables": {
     "missing": [],
@@ -22,5 +19,5 @@
     "unexpected": [],
     "match": true
   },
-  "overall_match": false
+  "overall_match": true
 }

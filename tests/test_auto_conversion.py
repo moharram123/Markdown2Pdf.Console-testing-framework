@@ -50,7 +50,6 @@ def build_extracted_structure(extracted_text):
         ] if item in extracted_text]
     }
 
-
 def run_case(markdown_file, baseline_file, expectations, should_pass):
     PDF_DIR.mkdir(parents=True, exist_ok=True)
     DIFF_DIR.mkdir(parents=True, exist_ok=True)

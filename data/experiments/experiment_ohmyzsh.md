@@ -39,7 +39,7 @@ Apply your theme:
 
 ```javascript
 function setTheme() {
-    console.log('ZSH_THEME="robbyrussell"');
+    console.log("Setting ZSH_THEME to robbyrussell");
 }
 ```
 
