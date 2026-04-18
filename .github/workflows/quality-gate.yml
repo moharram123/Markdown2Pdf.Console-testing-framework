@@ -66,9 +66,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
+          git fetch origin main
+          git reset --soft origin/main
           git add results/
           git diff --staged --quiet || git commit -m "ci: update test results [skip actions]"
-          git push
+          git push origin main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
