@@ -1,12 +1,12 @@
 file,should_pass,actual_pass,duration_seconds,llm_verdict
-control_headings.md,True,True,5.7704,PASS - The text is readable and structured.
-control_tables.md,True,True,5.774,PASS - Text is readable and structured.
-control_lists.md,True,True,5.8214,PASS - The text is readable and structured.
-control_codeblocks.md,True,True,5.8091,PASS - Text is readable and understandable.
-missing_heading.md,False,False,5.7685,PASS - Text is readable and recognizable.
-missing_table_row.md,False,False,5.7665,PASS - Text is readable and recognizable.
-missing_list_item.md,False,False,5.7772,PASS - Text is readable and well-structured.
-missing_codeblock.md,False,False,5.7974,PASS - Text is readable and understandable.
-experiment_kubernetes.md,True,True,5.8293,PASS - The text is readable and structured well.
-experiment_ohmyzsh.md,True,True,5.8279,PASS - Text is readable and structured well.
-experiment_fastapi.md,True,True,5.8854,PASS - Text is readable and contains recognizable structure.
+control_headings.md,True,True,9.4529,PASS - Text is readable and structured correctly.
+control_tables.md,True,True,8.5773,PASS - The text is readable and structured.
+control_lists.md,True,True,8.2074,PASS - Text is readable and recognizable.
+control_codeblocks.md,True,True,8.5104,PASS - Text is readable and recognizable.
+missing_heading.md,False,False,10.2928,PASS - Text is readable and has recognizable structure.
+missing_table_row.md,False,False,8.6333,PASS - Text is readable and structured.
+missing_list_item.md,False,False,8.4152,PASS - Text is readable and structured properly.
+missing_codeblock.md,False,False,8.9393,PASS - Text is readable and has structure.
+experiment_kubernetes.md,True,True,9.4002,PASS - Text is readable and structured well.
+experiment_ohmyzsh.md,True,True,9.7262,PASS - The text is readable and structured well.
+experiment_fastapi.md,True,True,9.8632,PASS - Text is readable and structured correctly.
