@@ -32,10 +32,13 @@ jobs:
       - name: Restore local tools
         run: dotnet tool restore
 
-      - name: Install Python dependencies
+      - name: Install core dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Install LLM dependencies
+        run: pip install -r requirements-llm.txt
 
       - name: Create result folders
         run: |
@@ -43,16 +46,17 @@ jobs:
           mkdir -p results/test-reports
           mkdir -p results/metrics
           mkdir -p results/diffs
+          mkdir -p results/llm-quality-check
 
       - name: Run core test suite
         run: |
           pytest tests --html=results/test-reports/report.html --self-contained-html
 
-      - name: Debug results folder
-        if: always()
+      - name: Run LLM quality check
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          echo "=== RESULTS TREE ==="
-          find results -maxdepth 3 -type f | sort
+          python -m llm_experiments.llm_quality_check
 
       - name: Upload artifacts
         if: always()

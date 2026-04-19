@@ -1,0 +1,57 @@
+[
+  {
+    "file": "control_codeblocks.pdf",
+    "verdict": "PASS - Text is readable and complete.",
+    "passed": true
+  },
+  {
+    "file": "control_headings.pdf",
+    "verdict": "PASS - Text is readable and structured properly.",
+    "passed": true
+  },
+  {
+    "file": "control_lists.pdf",
+    "verdict": "PASS - Text is readable and structured correctly.",
+    "passed": true
+  },
+  {
+    "file": "control_tables.pdf",
+    "verdict": "PASS - The text is readable and structured.",
+    "passed": true
+  },
+  {
+    "file": "experiment_fastapi.pdf",
+    "verdict": "PASS - Text is readable and well-structured.",
+    "passed": true
+  },
+  {
+    "file": "experiment_kubernetes.pdf",
+    "verdict": "PASS - Text is readable and well-structured.",
+    "passed": true
+  },
+  {
+    "file": "experiment_ohmyzsh.pdf",
+    "verdict": "PASS - Text is readable and structured correctly.",
+    "passed": true
+  },
+  {
+    "file": "missing_codeblock.pdf",
+    "verdict": "PASS - Text is readable and structured.",
+    "passed": true
+  },
+  {
+    "file": "missing_heading.pdf",
+    "verdict": "PASS - Text is readable with recognizable words.",
+    "passed": true
+  },
+  {
+    "file": "missing_list_item.pdf",
+    "verdict": "PASS - Text is readable and has clear structure.",
+    "passed": true
+  },
+  {
+    "file": "missing_table_row.pdf",
+    "verdict": "PASS - Text is readable and structurally clear.",
+    "passed": true
+  }
+]

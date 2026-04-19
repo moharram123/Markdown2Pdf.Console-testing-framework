@@ -1,0 +1,12 @@
+file,passed,verdict
+control_codeblocks.pdf,True,PASS - Text is readable and complete.
+control_headings.pdf,True,PASS - Text is readable and structured properly.
+control_lists.pdf,True,PASS - Text is readable and structured correctly.
+control_tables.pdf,True,PASS - The text is readable and structured.
+experiment_fastapi.pdf,True,PASS - Text is readable and well-structured.
+experiment_kubernetes.pdf,True,PASS - Text is readable and well-structured.
+experiment_ohmyzsh.pdf,True,PASS - Text is readable and structured correctly.
+missing_codeblock.pdf,True,PASS - Text is readable and structured.
+missing_heading.pdf,True,PASS - Text is readable with recognizable words.
+missing_list_item.pdf,True,PASS - Text is readable and has clear structure.
+missing_table_row.pdf,True,PASS - Text is readable and structurally clear.
