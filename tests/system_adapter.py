@@ -2,18 +2,20 @@ from pathlib import Path
 import subprocess
 import shutil
 import os
+import time
 from dotenv import load_dotenv
-from groq import Groq
+from openai import OpenAI
 
 # Load API key from .env
 load_dotenv()
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-def ask_llm(prompt: str, model: str = "llama-3.3-70b-versatile") -> str:
-    """Send a prompt to Groq and return the response text."""
+def ask_llm(prompt: str) -> str:
+    """Send a prompt to OpenAI and return the response text."""
+    time.sleep(1)
     response = client.chat.completions.create(
-        messages=[{"role": "user", "content": prompt}],
-        model=model,
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content
 

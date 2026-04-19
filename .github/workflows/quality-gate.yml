@@ -52,14 +52,13 @@ jobs:
           mkdir -p results/test-reports
           mkdir -p results/metrics
           mkdir -p results/diffs
-
+  
 
       - name: Run tests
         env:
-          GROQ_API_KEY: ${{secrets.GROQ_API_KEY}}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           pytest tests --html=results/test-reports/report.html --self-contained-html
-
 
       - name: Debug results folder
         if: always()
