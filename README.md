@@ -1,40 +1,40 @@
-#  Automated Integration Test Framework for Markdown2Pdf.Console
+# Automated Integration Test Framework for Markdown2Pdf.Console
 
 This repository contains a testing framework developed as part of a Bachelor thesis:
 
 > **Design and Evaluation of an Automated Integration Test Suite for Markdown2Pdf.Console**
 
-The project focuses on validating PDF documents generated from Markdown and detecting structural errors automatically using a reproducible testing approach.
+The project focuses on validating PDF documents generated from Markdown and detecting structural issues in a consistent and reproducible way.
 
 ---
 
-##  Project Goal
+## Project Goal
 
 Markdown2Pdf.Console is a command-line tool that converts Markdown files into PDF documents.
 
-In many real-world workflows, generated PDFs are not automatically validated, which can lead to unnoticed errors.
+In many workflows, generated PDFs are not automatically checked, which means errors can go unnoticed.
 
-This project aims to:
+The goal of this project is to:
 
-* Automate validation of generated PDF documents
+* Automatically validate generated PDF documents
 * Detect structural regressions (missing or broken elements)
 * Use a simple baseline comparison approach
 * Integrate testing into a CI/CD pipeline as a quality gate
 
 ---
 
-##  System Under Test
+## System Under Test
 
 * **Tool:** Markdown2Pdf.Console
 * **Version:** 2.0.2
 * **Execution:** CLI (`dotnet tool run md2pdf`)
 
-The original converter is treated as an **external system (black-box)**.
+The converter is treated as an external system (black-box).
 This repository focuses only on testing and validation.
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```text
 Markdown2Pdf.Console-testing-framework/
@@ -64,35 +64,35 @@ Markdown2Pdf.Console-testing-framework/
 
 ---
 
-##  Test Concept
+## Test Concept
 
-The framework validates four key Markdown structures in the generated PDFs:
+The framework checks four basic Markdown structures in the generated PDFs:
 
-* **Headings**
-* **Tables**
-* **Lists**
-* **Code blocks**
+* Headings
+* Tables
+* Lists
+* Code blocks
 
-###  Control Cases
+### Control Cases
 
-Correct Markdown files that should pass all tests.
+These are valid Markdown files that are expected to pass all tests.
 
-###  Regression Cases
+### Regression Cases
 
-Files containing intentional defects such as:
+These files contain intentional defects, for example:
 
 * Missing heading
 * Missing table row
 * Missing list item
 * Missing code block
 
-This allows evaluation of how well the framework detects errors.
+This setup makes it easier to see whether the framework correctly detects errors.
 
 ---
 
-## 📊 Baseline Mechanism
+## Baseline Mechanism
 
-Each control file has a corresponding JSON baseline describing the expected structure.
+Each control file has a corresponding JSON file describing the expected structure.
 
 Example:
 
@@ -105,17 +105,17 @@ Example:
 
 Test process:
 
-1. Convert Markdown → PDF
-2. Extract text from PDF
+1. Convert Markdown to PDF
+2. Extract text from the PDF
 3. Apply validation rules
-4. Compare extracted structure with baseline
-5. Detect differences and store results
+4. Compare the result with the baseline
+5. Store differences and results
 
-The baseline approach is intentionally simple to keep the system feasible for a Bachelor thesis.
+The baseline approach is intentionally kept simple to keep the system understandable and manageable for a Bachelor thesis.
 
 ---
 
-##  How to Run
+## How to Run
 
 ### 1. Install dependencies
 
@@ -132,76 +132,105 @@ pytest tests --html=results/test-reports/report.html --self-contained-html
 
 ---
 
-##  Output
+## Output
 
-After execution:
+After running the tests:
 
-*  PDFs → `results/generated-pdfs/`
-*  Report → `results/test-reports/report.html`
-*  Metrics → `results/metrics/`
-*  Diff reports → `results/diffs/`
+* PDFs → `results/generated-pdfs/`
+* Report → `results/test-reports/report.html`
+* Metrics → `results/metrics/`
+* Diff reports → `results/diffs/`
 
 ---
 
-##  Evaluation
+## Evaluation
 
-The framework supports basic evaluation metrics:
+The framework provides basic metrics that can be used in the thesis:
 
 * Regression detection accuracy
 * False positive rate
 * Execution time
 * Estimated time savings compared to manual validation
 
-These metrics are exported for use in the thesis evaluation chapter.
-
 ---
 
-##  CI/CD Integration
+## CI/CD Integration
 
-The project includes a GitHub Actions workflow that:
+A GitHub Actions workflow is included.
 
-* Runs tests automatically on each push
-* Generates test reports
+It:
+
+* Runs the tests on each push
+* Generates reports
 * Uploads results as artifacts
 
-The pipeline acts as a **quality gate**:
-if tests fail, the workflow fails.
+If tests fail, the workflow fails, which makes it usable as a simple quality gate.
 
 ---
 
-##  Design Decisions
+## Core Automated Integration Test Suite
 
-* A **black-box approach** is used because the converter is treated as an external CLI tool
-* Validation focuses on **text structure**, not visual PDF layout
-* The baseline mechanism is simplified for clarity and reproducibility
-* The framework prioritizes **simplicity and stability** over complexity
+The main part of this project is a deterministic and fully offline test suite.
+It does not require any API key or external service.
 
----
+This is the central contribution of the thesis.
 
-##  Limitations
+### How it works
 
-* No visual/layout validation of PDFs
-* Limited set of Markdown features tested
-* Baseline comparison is not fully comprehensive
-* Results depend on text extraction accuracy
-
----
-
-##  Current Status
-
-* All control and regression tests are passing
-* PDF validation is working correctly
-* Metrics are generated for evaluation
-* CI/CD pipeline is functional
+1. Convert Markdown to PDF using the CLI tool
+2. Extract text using `pdfminer.six`
+3. Apply rule-based validation
+4. Compare with baseline
+5. Export results and metrics
 
 ---
 
-##  Author
+## Optional LLM-Based Experiment
 
-* Assia Moharram
+There is also a small experimental component located in `llm_experiments/`.
+
+It uses the OpenAI API to check whether generated PDFs are readable and not corrupted.
+
+This part is optional and not connected to the main test suite.
+It does not affect test results or CI/CD status.
+
+Because LLM outputs are not deterministic, this part is only used for exploration.
 
 ---
 
-## Note 
+## Design Decisions
+
+* The system uses a black-box approach
+* Validation focuses on text structure, not layout
+* The baseline mechanism is kept simple
+* The focus is on stability and reproducibility
+
+---
+
+## Limitations
+
+* No visual validation of PDFs
+* Only a subset of Markdown features is tested
+* Baseline comparison is simplified
+* Results depend on text extraction quality
+
+---
+
+## Current Status
+
+* Control and regression tests are working
+* PDF validation is stable
+* Metrics are generated
+* CI/CD pipeline is running
+
+---
+
+## Author
+
+Assia Moharram
+
+---
+
+## Note
 
 This project is part of a Bachelor thesis in Business Informatics and follows a Design Science Research approach.

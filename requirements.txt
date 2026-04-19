@@ -1,6 +1,4 @@
 pytest
 pytest-html
 pdfplumber
-openai
-python-dotenv
 pdfminer.six
