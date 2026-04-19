@@ -1,6 +1,21 @@
 from pathlib import Path
 import subprocess
 import shutil
+import os
+from dotenv import load_dotenv
+from groq import Groq
+
+# Load API key from .env
+load_dotenv()
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
+def ask_llm(prompt: str, model: str = "llama-3.3-70b-versatile") -> str:
+    """Send a prompt to Groq and return the response text."""
+    response = client.chat.completions.create(
+        messages=[{"role": "user", "content": prompt}],
+        model=model,
+    )
+    return response.choices[0].message.content
 
 
 SUT_NAME = "Markdown2Pdf.Console"

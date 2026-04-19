@@ -2,15 +2,18 @@ from pathlib import Path
 import time
 import pytest
 
-from .system_adapter import convert_markdown_to_pdf, get_sut_version, SUPPORTED_VERSION
+
+from .system_adapter import convert_markdown_to_pdf, get_sut_version, SUPPORTED_VERSION, ask_llm
 from .pdf_text_extractor import extract_text_from_pdf
 from .baseline_comparator import load_baseline, compare_baseline, save_difference_report
 from .evaluation_metrics import calculate_metrics, save_metrics_json, save_results_csv
+
 
 from validation_rules.heading_rules import headings_are_valid
 from validation_rules.table_rules import table_is_valid
 from validation_rules.list_rules import list_is_valid
 from validation_rules.codeblock_rules import codeblock_is_valid
+
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,6 +24,7 @@ PDF_DIR = RESULTS_DIR / "generated-pdfs"
 REPORT_DIR = RESULTS_DIR / "test-reports"
 METRICS_DIR = RESULTS_DIR / "metrics"
 DIFF_DIR = RESULTS_DIR / "diffs"
+
 
 
 def build_extracted_structure(extracted_text):
@@ -50,6 +54,8 @@ def build_extracted_structure(extracted_text):
         ] if item in extracted_text]
     }
 
+
+
 def run_case(markdown_file, baseline_file, expectations, should_pass):
     PDF_DIR.mkdir(parents=True, exist_ok=True)
     DIFF_DIR.mkdir(parents=True, exist_ok=True)
@@ -65,10 +71,35 @@ def run_case(markdown_file, baseline_file, expectations, should_pass):
 
     extracted_text = extract_text_from_pdf(pdf_path)
 
+    # Rule-based checks
     heading_ok, missing_headings = headings_are_valid(extracted_text, expectations.get("headings", []))
     table_ok, missing_tables = table_is_valid(extracted_text, expectations.get("tables", []))
     list_ok, missing_lists = list_is_valid(extracted_text, expectations.get("lists", []))
     code_ok, missing_code = codeblock_is_valid(extracted_text, expectations.get("codeblocks", []))
+
+    # LLM-based quality check
+    llm_prompt = f"""
+You are a PDF quality checker. The following text was extracted from a converted PDF document.
+
+Your job is to check if the conversion was successful — NOT to judge if the content is complete or comprehensive.
+
+A conversion is PASS if:
+- The text is readable and not garbled
+- It contains recognizable words and structure
+- It is not completely empty
+
+A conversion is FAIL only if:
+- The text is completely empty
+- The text is garbled/unreadable (e.g. random symbols)
+- The text is clearly corrupted
+
+Reply with ONLY: PASS or FAIL, followed by one short reason (max 10 words).
+
+Extracted text:
+{extracted_text[:2000]}
+"""
+    llm_verdict = ask_llm(llm_prompt)
+    llm_pass = llm_verdict.strip().upper().startswith("PASS")
 
     extracted_structure = build_extracted_structure(extracted_text)
     baseline_data = load_baseline(baseline_file)
@@ -77,7 +108,14 @@ def run_case(markdown_file, baseline_file, expectations, should_pass):
     report_path = DIFF_DIR / f"{markdown_file.stem}_diff.json"
     save_difference_report(comparison, report_path)
 
-    overall_valid = all([heading_ok, table_ok, list_ok, code_ok, comparison["overall_match"]])
+    overall_valid = all([
+        heading_ok,
+        table_ok,
+        list_ok,
+        code_ok,
+        comparison["overall_match"],
+        llm_pass
+    ])
 
     if should_pass and not overall_valid:
         pytest.fail(
@@ -85,7 +123,8 @@ def run_case(markdown_file, baseline_file, expectations, should_pass):
             f"Missing headings: {missing_headings}; "
             f"Missing tables: {missing_tables}; "
             f"Missing lists: {missing_lists}; "
-            f"Missing code: {missing_code}"
+            f"Missing code: {missing_code}; "
+            f"LLM verdict: {llm_verdict}"
         )
 
     if not should_pass and overall_valid:
@@ -95,13 +134,16 @@ def run_case(markdown_file, baseline_file, expectations, should_pass):
         "file": markdown_file.name,
         "should_pass": should_pass,
         "actual_pass": overall_valid,
-        "duration_seconds": round(duration, 4)
+        "duration_seconds": round(duration, 4),
+        "llm_verdict": llm_verdict.strip()
     }
+
 
 
 def test_sut_version_is_available():
     version = get_sut_version()
     assert version == "unknown" or SUPPORTED_VERSION in version
+
 
 
 TEST_CASES = [
@@ -153,7 +195,7 @@ TEST_CASES = [
         "expectations": {"codeblocks": ["print("]},
         "should_pass": False
     },
-        {
+    {
         "markdown": DATA_DIR / "experiments" / "experiment_kubernetes.md",
         "baseline": DATA_DIR / "baselines" / "experiment_kubernetes.json",
         "expectations": {
@@ -186,8 +228,8 @@ TEST_CASES = [
         },
         "should_pass": True
     },
-
 ]
+
 
 
 @pytest.mark.parametrize(
@@ -199,6 +241,8 @@ TEST_CASES = [
 )
 def test_markdown_conversion_cases(markdown_file, baseline_file, expectations, should_pass):
     run_case(markdown_file, baseline_file, expectations, should_pass)
+
+
 
 def test_export_metrics():
     METRICS_DIR.mkdir(parents=True, exist_ok=True)

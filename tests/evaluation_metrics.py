@@ -52,7 +52,7 @@ def save_results_csv(results, output_path):
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["file", "should_pass", "actual_pass", "duration_seconds"]
+            fieldnames=["file", "should_pass", "actual_pass", "duration_seconds", "llm_verdict"]
         )
         writer.writeheader()
         writer.writerows(results)

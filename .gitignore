@@ -243,3 +243,6 @@ results/diffs/*
 !results/diffs/*
 
 !results/**/.gitkeep
+
+# Environment variables
+.env
