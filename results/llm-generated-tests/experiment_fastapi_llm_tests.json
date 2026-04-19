@@ -15,32 +15,65 @@
       "Contributors"
     ],
     "tables": [
-      "Alice | Performance Engineer",
-      "Bob | Benchmark Analyst",
-      "Carol | Admin",
-      "Alice | Gold Sponsor",
-      "Bob | Silver Sponsor",
-      "Carol | Individual Contributor",
-      "Dave | Admin",
-      "Alice | Core Developer",
-      "Bob | Documentation Maintainer",
-      "Carol | Plugin Author",
-      "Dave | Admin"
+      {
+        "Name": "Alice",
+        "Role": "Performance Engineer"
+      },
+      {
+        "Name": "Bob",
+        "Role": "Benchmark Analyst"
+      },
+      {
+        "Name": "Carol",
+        "Role": "Admin"
+      },
+      {
+        "Name": "Alice",
+        "Role": "Gold Sponsor"
+      },
+      {
+        "Name": "Bob",
+        "Role": "Silver Sponsor"
+      },
+      {
+        "Name": "Carol",
+        "Role": "Individual Contributor"
+      },
+      {
+        "Name": "Dave",
+        "Role": "Admin"
+      },
+      {
+        "Name": "Alice",
+        "Role": "Core Developer"
+      },
+      {
+        "Name": "Bob",
+        "Role": "Documentation Maintainer"
+      },
+      {
+        "Name": "Carol",
+        "Role": "Plugin Author"
+      },
+      {
+        "Name": "Dave",
+        "Role": "Admin"
+      }
     ],
     "lists": [
-      "Fast to code increases development speed by 200 to 300 percent",
-      "Fewer bugs reduces about 40 percent of human induced errors",
-      "Intuitive with great editor support and autocompletion",
-      "Easy to use and designed for quick learning",
-      "Short code minimizes duplication across the codebase",
-      "Robust with production-ready automatic interactive docs",
-      "Standards-based on OpenAPI and JSON Schema",
-      "Swagger UI available at /docs",
-      "ReDoc available at /redoc",
-      "OpenAPI JSON available at /openapi.json",
-      "GitHub Discussions for questions and ideas",
-      "Discord for the FastAPI community",
-      "Twitter follow tiangolo for updates"
+      "First item: Fast to code increases development speed by 200 to 300 percent",
+      "Second item: Fewer bugs reduces about 40 percent of human induced errors",
+      "Third item: Intuitive with great editor support and autocompletion",
+      "Fourth item: Easy to use and designed for quick learning",
+      "Fifth item: Short code minimizes duplication across the codebase",
+      "Sixth item: Robust with production-ready automatic interactive docs",
+      "Seventh item: Standards-based on OpenAPI and JSON Schema",
+      "First item: Swagger UI available at /docs",
+      "Second item: ReDoc available at /redoc",
+      "Third item: OpenAPI JSON available at /openapi.json",
+      "First item: GitHub Discussions for questions and ideas",
+      "Second item: Discord for the FastAPI community",
+      "Third item: Twitter follow tiangolo for updates"
     ],
     "codeblocks": [
       "def install():\n    print(\"pip install fastapi\")\n    print(\"pip install uvicorn[standard]\")",
