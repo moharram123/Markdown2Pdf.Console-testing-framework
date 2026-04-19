@@ -1,0 +1,13 @@
+{
+  "true_positives": 4,
+  "false_negatives": 0,
+  "false_positives": 0,
+  "true_negatives": 7,
+  "regression_detection_accuracy": 1.0,
+  "false_positive_rate": 0.0,
+  "artifact_stability_note": "Measure by repeating control runs and checking identical verdicts.",
+  "avg_execution_time_seconds": 5.8958,
+  "total_automated_time_seconds": 64.8539,
+  "estimated_manual_time_seconds": 660,
+  "manual_time_reduction": 0.9017
+}
