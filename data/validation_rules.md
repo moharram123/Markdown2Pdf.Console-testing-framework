@@ -12,4 +12,4 @@
 7. Text content must not be truncated unexpectedly.
 8. Expected section titles must remain unchanged.
 9. Important values and labels must remain readable after conversion.
-10. The generated PDF must not be empty.
+10. The generated PDF must not be empty
