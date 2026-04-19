@@ -1,50 +1,54 @@
-# Automated Integration Test Suite for Markdown2Pdf.Console
+#  Automated Integration Test Framework for Markdown2Pdf.Console
 
-This repository contains an automated integration test suite developed as part of the Bachelor thesis:
+This repository contains a testing framework developed as part of a Bachelor thesis:
 
 > **Design and Evaluation of an Automated Integration Test Suite for Markdown2Pdf.Console**
 
-The goal of this project is to automatically validate PDF documents generated from Markdown and detect possible errors using a structured testing approach.
+The project focuses on validating PDF documents generated from Markdown and detecting structural errors automatically using a reproducible testing approach.
 
 ---
 
-## Project Goal
+##  Project Goal
 
-Markdown2Pdf.Console is a tool that converts Markdown files into PDF documents.
-In many real-world scenarios, these PDFs are not automatically tested, which can lead to unnoticed errors.
+Markdown2Pdf.Console is a command-line tool that converts Markdown files into PDF documents.
+
+In many real-world workflows, generated PDFs are not automatically validated, which can lead to unnoticed errors.
 
 This project aims to:
 
-* Automate the validation of generated PDFs
-* Detect structural and content regressions
-* Provide a simple baseline comparison mechanism
+* Automate validation of generated PDF documents
+* Detect structural regressions (missing or broken elements)
+* Use a simple baseline comparison approach
 * Integrate testing into a CI/CD pipeline as a quality gate
 
 ---
 
-## ⚙️ System Under Test
+##  System Under Test
 
 * **Tool:** Markdown2Pdf.Console
 * **Version:** 2.0.2
 * **Execution:** CLI (`dotnet tool run md2pdf`)
 
-The converter itself is not modified. This repository focuses only on testing and validation.
+The original converter is treated as an **external system (black-box)**.
+This repository focuses only on testing and validation.
 
 ---
 
-## Project Structure
+##  Project Structure
 
 ```text
-markdown2pdf-quality-gate/
+Markdown2Pdf.Console-testing-framework/
 │
 ├── data/
-│   ├── pilot/           # Valid test cases (control)
-│   ├── regressions/     # Faulty test cases
+│   ├── pilot/           # Valid Markdown files (control cases)
+│   ├── regressions/     # Faulty Markdown files (regression cases)
 │   └── baselines/       # Expected structures (JSON)
 │
 ├── results/
 │   ├── generated-pdfs/  # Generated PDF files
-│   └── test-reports/    # HTML test reports
+│   ├── test-reports/    # HTML reports
+│   ├── metrics/         # Evaluation outputs
+│   └── diffs/           # Per-case comparison results
 │
 ├── tests/
 │   ├── test_auto_conversion.py
@@ -53,16 +57,16 @@ markdown2pdf-quality-gate/
 │   ├── baseline_comparator.py
 │   └── evaluation_metrics.py
 │
-├── validation_rules/    # Validation logic
+├── validation_rules/    # Validation logic for structure checks
 ├── requirements.txt
 └── pytest.ini
 ```
 
 ---
 
-## Test Concept
+##  Test Concept
 
-The test suite validates four main elements in the generated PDFs:
+The framework validates four key Markdown structures in the generated PDFs:
 
 * **Headings**
 * **Tables**
@@ -75,15 +79,20 @@ Correct Markdown files that should pass all tests.
 
 ###  Regression Cases
 
-Modified files containing intentional errors (e.g. missing elements).
+Files containing intentional defects such as:
 
-This allows evaluation of how well the system detects errors.
+* Missing heading
+* Missing table row
+* Missing list item
+* Missing code block
+
+This allows evaluation of how well the framework detects errors.
 
 ---
 
-## Baseline Mechanism
+## 📊 Baseline Mechanism
 
-Each control file has a corresponding JSON baseline that defines the expected structure.
+Each control file has a corresponding JSON baseline describing the expected structure.
 
 Example:
 
@@ -94,16 +103,19 @@ Example:
 }
 ```
 
-During testing:
+Test process:
 
-1. Markdown → PDF conversion
-2. Text extraction from PDF
-3. Comparison with baseline
-4. Detection of differences
+1. Convert Markdown → PDF
+2. Extract text from PDF
+3. Apply validation rules
+4. Compare extracted structure with baseline
+5. Detect differences and store results
+
+The baseline approach is intentionally simple to keep the system feasible for a Bachelor thesis.
 
 ---
 
-## How to Run
+##  How to Run
 
 ### 1. Install dependencies
 
@@ -120,55 +132,76 @@ pytest tests --html=results/test-reports/report.html --self-contained-html
 
 ---
 
-##Output
+##  Output
 
-After running tests:
+After execution:
 
-* PDFs → `results/generated-pdfs/`
-* Report → `results/test-reports/report.html`
-* Metrics → CSV and JSON files
+*  PDFs → `results/generated-pdfs/`
+*  Report → `results/test-reports/report.html`
+*  Metrics → `results/metrics/`
+*  Diff reports → `results/diffs/`
 
 ---
 
-## Evaluation
+##  Evaluation
 
-The system supports basic evaluation metrics:
+The framework supports basic evaluation metrics:
 
 * Regression detection accuracy
 * False positive rate
 * Execution time
 * Estimated time savings compared to manual validation
 
+These metrics are exported for use in the thesis evaluation chapter.
+
 ---
 
-## CI/CD Integration
+##  CI/CD Integration
 
 The project includes a GitHub Actions workflow that:
 
-* Runs tests automatically
-* Generates reports
-* Fails the pipeline if tests fail
+* Runs tests automatically on each push
+* Generates test reports
+* Uploads results as artifacts
 
-This acts as a **quality gate** for document generation.
-
----
-
-## Limitations
-
-* Validation is based on extracted text, not visual PDF layout
-* Only selected Markdown features are tested
-* Baseline approach is simplified
-
-These limitations are discussed in the thesis.
+The pipeline acts as a **quality gate**:
+if tests fail, the workflow fails.
 
 ---
 
-## Author
+##  Design Decisions
+
+* A **black-box approach** is used because the converter is treated as an external CLI tool
+* Validation focuses on **text structure**, not visual PDF layout
+* The baseline mechanism is simplified for clarity and reproducibility
+* The framework prioritizes **simplicity and stability** over complexity
+
+---
+
+##  Limitations
+
+* No visual/layout validation of PDFs
+* Limited set of Markdown features tested
+* Baseline comparison is not fully comprehensive
+* Results depend on text extraction accuracy
+
+---
+
+##  Current Status
+
+* All control and regression tests are passing
+* PDF validation is working correctly
+* Metrics are generated for evaluation
+* CI/CD pipeline is functional
+
+---
+
+##  Author
 
 * Assia Moharram
 
 ---
 
-##  Note
+## Note 
 
 This project is part of a Bachelor thesis in Business Informatics and follows a Design Science Research approach.

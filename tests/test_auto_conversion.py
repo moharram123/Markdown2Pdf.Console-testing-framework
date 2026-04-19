@@ -226,6 +226,7 @@ TEST_CASES = [
         for case in TEST_CASES
     ]
 )
+
 def test_markdown_conversion_cases(markdown_file, baseline_file, expectations, should_pass):
     run_case(markdown_file, baseline_file, expectations, should_pass)
 
