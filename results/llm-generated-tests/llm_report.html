@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Test Generation Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #2F75B6; }
+        h2 { color: #444; }
+        table { border-collapse: collapse; width: 100%; }
+        th { background-color: #2F75B6; color: white; padding: 10px; text-align: left; }
+        td { padding: 8px; border: 1px solid #ddd; }
+        .summary { background-color: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        .badge { font-size: 2em; font-weight: bold; color: #2F75B6; }
+    </style>
+</head>
+<body>
+    <h1>LLM-Assisted Test Generation Report</h1>
+
+    <div class="summary">
+        <h2>Summary</h2>
+        <p>Total files analyzed: <strong>7</strong></p>
+        <p>Average coverage: <span class="badge">89%</span></p>
+        <p>LLM-generated tests cover 89% of manually written tests on average</p>
+    </div>
+
+    <h2>Detailed Results</h2>
+    <table>
+        <tr>
+            <th>File</th>
+            <th>Category</th>
+            <th>Manual Count</th>
+            <th>LLM Count</th>
+            <th>Matched</th>
+            <th>Coverage</th>
+        </tr>
+        
+            <tr style="background-color:#C6EFCE">
+                <td>control_headings.md</td>
+                <td>headings</td>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_headings.md</td>
+                <td>tables</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_headings.md</td>
+                <td>lists</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_headings.md</td>
+                <td>codeblocks</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_tables.md</td>
+                <td>headings</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_tables.md</td>
+                <td>tables</td>
+                <td>3</td>
+                <td>4</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_tables.md</td>
+                <td>lists</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_tables.md</td>
+                <td>codeblocks</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_lists.md</td>
+                <td>headings</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_lists.md</td>
+                <td>tables</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_lists.md</td>
+                <td>lists</td>
+                <td>3</td>
+                <td>3</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_lists.md</td>
+                <td>codeblocks</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_codeblocks.md</td>
+                <td>headings</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_codeblocks.md</td>
+                <td>tables</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_codeblocks.md</td>
+                <td>lists</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>control_codeblocks.md</td>
+                <td>codeblocks</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_kubernetes.md</td>
+                <td>headings</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_kubernetes.md</td>
+                <td>tables</td>
+                <td>5</td>
+                <td>9</td>
+                <td>5</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#FFC7CE">
+                <td>experiment_kubernetes.md</td>
+                <td>lists</td>
+                <td>8</td>
+                <td>15</td>
+                <td>0</td>
+                <td>0%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_kubernetes.md</td>
+                <td>codeblocks</td>
+                <td>3</td>
+                <td>5</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_ohmyzsh.md</td>
+                <td>headings</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_ohmyzsh.md</td>
+                <td>tables</td>
+                <td>5</td>
+                <td>8</td>
+                <td>5</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#FFC7CE">
+                <td>experiment_ohmyzsh.md</td>
+                <td>lists</td>
+                <td>8</td>
+                <td>14</td>
+                <td>0</td>
+                <td>0%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_ohmyzsh.md</td>
+                <td>codeblocks</td>
+                <td>3</td>
+                <td>5</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_fastapi.md</td>
+                <td>headings</td>
+                <td>11</td>
+                <td>11</td>
+                <td>11</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_fastapi.md</td>
+                <td>tables</td>
+                <td>5</td>
+                <td>11</td>
+                <td>5</td>
+                <td>100%</td>
+            </tr>
+            <tr style="background-color:#FFC7CE">
+                <td>experiment_fastapi.md</td>
+                <td>lists</td>
+                <td>7</td>
+                <td>13</td>
+                <td>0</td>
+                <td>0%</td>
+            </tr>
+            <tr style="background-color:#C6EFCE">
+                <td>experiment_fastapi.md</td>
+                <td>codeblocks</td>
+                <td>3</td>
+                <td>5</td>
+                <td>3</td>
+                <td>100%</td>
+            </tr>
+    </table>
+</body>
+</html>

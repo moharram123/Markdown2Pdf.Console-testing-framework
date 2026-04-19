@@ -1,0 +1,50 @@
+{
+  "file": "experiment_ohmyzsh.md",
+  "expectations": {
+    "headings": [
+      "Oh My Zsh",
+      "Introduction",
+      "Features",
+      "Usage",
+      "Plugin Reference Table",
+      "Themes",
+      "Configuration",
+      "Community Contributors",
+      "Getting Help",
+      "Uninstalling"
+    ],
+    "tables": [
+      "Alice | Plugin Maintainer",
+      "Bob | Theme Developer",
+      "Carol | Core Contributor",
+      "Dave | Admin",
+      "Alice | Lead Maintainer",
+      "Bob | Community Manager",
+      "Carol | Documentation Writer",
+      "Dave | Admin"
+    ],
+    "lists": [
+      "Auto-update tools to keep your installation fresh",
+      "Over 300 optional plugins including git, docker, kubectl",
+      "Over 140 themes to customize your terminal",
+      "Auto-update tool to keep installation up to date",
+      "Helper functions and aliases for daily use",
+      "Plugin management system for extensibility",
+      "Community-contributed themes and plugins",
+      "Cross-platform support for macOS, Linux, and WSL",
+      "robbyrussell is the default clean theme",
+      "agnoster is powerline-style with git info",
+      "powerlevel10k is highly customizable and fast",
+      "GitHub Issues for bugs and feature requests",
+      "Discord community chat server",
+      "Wiki for comprehensive documentation"
+    ],
+    "codeblocks": [
+      "def install_ohmyzsh():\n    print(\"sh -c install.sh from ohmyzsh repository\")",
+      "def configure_plugins():\n    print(\"plugins=(git docker kubectl python pip)\")\n    def apply():\n        print(\"source ~/.zshrc\")",
+      "function setTheme() {\n    console.log(\"Setting ZSH_THEME to robbyrussell\");\n}",
+      "def advanced_config():\n    print(\"export ZSH=$HOME/.oh-my-zsh\")\n    print(\"export ZSH_THEME=agnoster\")\n    def update():\n        print(\"export UPDATE_ZSH_DAYS=13\")",
+      "def uninstall():\n    print(\"uninstall_oh_my_zsh\")\n    def cleanup():\n        print(\"Removing ~/.oh-my-zsh directory\")"
+    ]
+  }
+}
