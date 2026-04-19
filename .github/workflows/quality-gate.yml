@@ -45,17 +45,15 @@ jobs:
           mkdir -p results/diffs
           mkdir -p results/llm-generated-tests
 
-      - name: Run tests
+      # NOTE: The LLM test generator is now integrated into pytest via
+      # test_llm_test_generation_runs() and test_llm_vs_manual_comparison()
+      # in llm_test_generator.py, so it appears in the HTML test report.
+      # No separate script call is needed here.
+      - name: Run tests (includes LLM generation step)
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           pytest tests --html=results/test-reports/report.html --self-contained-html
-
-      - name: Run LLM test generator
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: |
-          python tests/llm_test_generator.py
 
       - name: Debug results folder
         if: always()
