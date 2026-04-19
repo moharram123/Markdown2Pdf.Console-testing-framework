@@ -1,0 +1,4 @@
+# LLM experiment dependencies — only needed for llm_experiments/
+openai>=1.0.0
+python-dotenv>=1.0.0
+PyMuPDF>=1.23.0

@@ -1,13 +1,12 @@
+# tests/test_auto_conversion.py
 from pathlib import Path
 import time
 import pytest
 
-
-from .system_adapter import convert_markdown_to_pdf, get_sut_version, SUPPORTED_VERSION, ask_llm
+from .system_adapter import convert_markdown_to_pdf, get_sut_version, SUPPORTED_VERSION
 from .pdf_text_extractor import extract_text_from_pdf
 from .baseline_comparator import load_baseline, compare_baseline, save_difference_report
 from .evaluation_metrics import calculate_metrics, save_metrics_json, save_results_csv
-
 from validation_rules.heading_rules import headings_are_valid
 from validation_rules.table_rules import table_is_valid
 from validation_rules.list_rules import list_is_valid
@@ -21,7 +20,6 @@ REPORT_DIR = RESULTS_DIR / "test-reports"
 METRICS_DIR = RESULTS_DIR / "metrics"
 DIFF_DIR = RESULTS_DIR / "diffs"
 
-
 # NOTE (Limitation): build_extracted_structure() uses a simplified approach.
 # Instead of dynamically extracting structural elements from the PDF text,
 # it checks for the presence of known/expected string literals.
@@ -30,10 +28,11 @@ def build_extracted_structure(extracted_text):
     return {
         "headings": [item for item in [
             "Introduction", "Features", "Usage",
-            "Kubernetes", "Kubernetes Components", "Governance", "Community",
-            "Support", "Security", "Architecture",
-            "Oh My Zsh", "Plugin Reference Table", "Themes", "Configuration",
-            "Community Contributors", "Getting Help", "Uninstalling",
+            "Kubernetes", "Kubernetes Components", "Governance",
+            "Community", "Support", "Security", "Architecture",
+            "Oh My Zsh", "Plugin Reference Table", "Themes",
+            "Configuration", "Community Contributors",
+            "Getting Help", "Uninstalling",
             "FastAPI", "Performance Benchmarks", "Sponsors Table",
             "Interactive Documentation", "Type System", "Contributors"
         ] if item in extracted_text],
@@ -56,6 +55,7 @@ def run_case(markdown_file, baseline_file, expectations, should_pass):
     DIFF_DIR.mkdir(parents=True, exist_ok=True)
 
     pdf_path = PDF_DIR / f"{markdown_file.stem}.pdf"
+
     start = time.perf_counter()
     conversion = convert_markdown_to_pdf(markdown_file, pdf_path)
     duration = time.perf_counter() - start
@@ -65,36 +65,16 @@ def run_case(markdown_file, baseline_file, expectations, should_pass):
 
     extracted_text = extract_text_from_pdf(pdf_path)
 
-    # Rule-based checks
+    # Rule-based checks (fully deterministic — no external services)
     heading_ok, missing_headings = headings_are_valid(extracted_text, expectations.get("headings", []))
-    table_ok, missing_tables = table_is_valid(extracted_text, expectations.get("tables", []))
-    list_ok, missing_lists = list_is_valid(extracted_text, expectations.get("lists", []))
-    code_ok, missing_code = codeblock_is_valid(extracted_text, expectations.get("codeblocks", []))
-
-    # LLM-based quality check
-    # NOTE (Limitation): This check calls the OpenAI API (gpt-4o-mini) on every test case.
-    # If the API key is unavailable, rate-limited, or the service is down, tests will fail.
-    # This external dependency is an acknowledged reliability risk documented in the thesis.
-    llm_prompt = f"""You are a PDF quality checker. The following text was extracted from a converted PDF document.
-Your job is to check if the conversion was successful — NOT to judge if the content is complete or comprehensive.
-A conversion is PASS if:
-- The text is readable and not garbled
-- It contains recognizable words and structure
-- It is not completely empty
-A conversion is FAIL only if:
-- The text is completely empty
-- The text is garbled/unreadable (e.g. random symbols)
-- The text is clearly corrupted
-Reply with ONLY: PASS or FAIL, followed by one short reason (max 10 words).
-Extracted text:
-{extracted_text[:2000]}
-"""
-    llm_verdict = ask_llm(llm_prompt)
-    llm_pass = llm_verdict.strip().upper().startswith("PASS")
+    table_ok, missing_tables   = table_is_valid(extracted_text, expectations.get("tables", []))
+    list_ok, missing_lists     = list_is_valid(extracted_text, expectations.get("lists", []))
+    code_ok, missing_code      = codeblock_is_valid(extracted_text, expectations.get("codeblocks", []))
 
     extracted_structure = build_extracted_structure(extracted_text)
     baseline_data = load_baseline(baseline_file)
     comparison = compare_baseline(baseline_data, extracted_structure)
+
     report_path = DIFF_DIR / f"{markdown_file.stem}_diff.json"
     save_difference_report(comparison, report_path)
 
@@ -103,8 +83,7 @@ Extracted text:
         table_ok,
         list_ok,
         code_ok,
-        comparison["overall_match"],
-        llm_pass
+        comparison["overall_match"]
     ])
 
     if should_pass and not overall_valid:
@@ -113,8 +92,7 @@ Extracted text:
             f"Missing headings: {missing_headings}; "
             f"Missing tables: {missing_tables}; "
             f"Missing lists: {missing_lists}; "
-            f"Missing code: {missing_code}; "
-            f"LLM verdict: {llm_verdict}"
+            f"Missing code: {missing_code}"
         )
 
     if not should_pass and overall_valid:
@@ -124,8 +102,7 @@ Extracted text:
         "file": markdown_file.name,
         "should_pass": should_pass,
         "actual_pass": overall_valid,
-        "duration_seconds": round(duration, 4),
-        "llm_verdict": llm_verdict.strip()
+        "duration_seconds": round(duration, 4)
     }
 
 
@@ -136,83 +113,95 @@ def test_sut_version_is_available():
 
 TEST_CASES = [
     {
-        "markdown": DATA_DIR / "pilot" / "control_headings.md",
-        "baseline": DATA_DIR / "baselines" / "control_headings.json",
+        "markdown":     DATA_DIR / "pilot" / "control_headings.md",
+        "baseline":     DATA_DIR / "baselines" / "control_headings.json",
         "expectations": {"headings": ["Introduction", "Features"]},
-        "should_pass": True
+        "should_pass":  True
     },
     {
-        "markdown": DATA_DIR / "pilot" / "control_tables.md",
-        "baseline": DATA_DIR / "baselines" / "control_tables.json",
+        "markdown":     DATA_DIR / "pilot" / "control_tables.md",
+        "baseline":     DATA_DIR / "baselines" / "control_tables.json",
         "expectations": {"tables": ["Alice", "Bob", "Admin"]},
-        "should_pass": True
+        "should_pass":  True
     },
     {
-        "markdown": DATA_DIR / "pilot" / "control_lists.md",
-        "baseline": DATA_DIR / "baselines" / "control_lists.json",
+        "markdown":     DATA_DIR / "pilot" / "control_lists.md",
+        "baseline":     DATA_DIR / "baselines" / "control_lists.json",
         "expectations": {"lists": ["First item", "Second item", "Third item"]},
-        "should_pass": True
+        "should_pass":  True
     },
     {
-        "markdown": DATA_DIR / "pilot" / "control_codeblocks.md",
-        "baseline": DATA_DIR / "baselines" / "control_codeblocks.json",
+        "markdown":     DATA_DIR / "pilot" / "control_codeblocks.md",
+        "baseline":     DATA_DIR / "baselines" / "control_codeblocks.json",
         "expectations": {"codeblocks": ["print("]},
-        "should_pass": True
+        "should_pass":  True
     },
     {
-        "markdown": DATA_DIR / "regressions" / "missing_heading.md",
-        "baseline": DATA_DIR / "baselines" / "control_headings.json",
+        "markdown":     DATA_DIR / "regressions" / "missing_heading.md",
+        "baseline":     DATA_DIR / "baselines" / "control_headings.json",
         "expectations": {"headings": ["Introduction", "Features"]},
-        "should_pass": False
+        "should_pass":  False
     },
     {
-        "markdown": DATA_DIR / "regressions" / "missing_table_row.md",
-        "baseline": DATA_DIR / "baselines" / "control_tables.json",
+        "markdown":     DATA_DIR / "regressions" / "missing_table_row.md",
+        "baseline":     DATA_DIR / "baselines" / "control_tables.json",
         "expectations": {"tables": ["Alice", "Bob", "Admin"]},
-        "should_pass": False
+        "should_pass":  False
     },
     {
-        "markdown": DATA_DIR / "regressions" / "missing_list_item.md",
-        "baseline": DATA_DIR / "baselines" / "control_lists.json",
+        "markdown":     DATA_DIR / "regressions" / "missing_list_item.md",
+        "baseline":     DATA_DIR / "baselines" / "control_lists.json",
         "expectations": {"lists": ["First item", "Second item", "Third item"]},
-        "should_pass": False
+        "should_pass":  False
     },
     {
-        "markdown": DATA_DIR / "regressions" / "missing_codeblock.md",
-        "baseline": DATA_DIR / "baselines" / "control_codeblocks.json",
+        "markdown":     DATA_DIR / "regressions" / "missing_codeblock.md",
+        "baseline":     DATA_DIR / "baselines" / "control_codeblocks.json",
         "expectations": {"codeblocks": ["print("]},
-        "should_pass": False
+        "should_pass":  False
     },
     {
-        "markdown": DATA_DIR / "experiments" / "experiment_kubernetes.md",
-        "baseline": DATA_DIR / "baselines" / "experiment_kubernetes.json",
+        "markdown":     DATA_DIR / "experiments" / "experiment_kubernetes.md",
+        "baseline":     DATA_DIR / "baselines" / "experiment_kubernetes.json",
         "expectations": {
-            "headings": ["Kubernetes", "Introduction", "Features", "Usage", "Kubernetes Components", "Governance", "Community", "Support", "Security", "Architecture"],
-            "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
-            "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item", "Eighth item"],
-            "codeblocks": ["print(", "def ", "console.log"]
+            "headings":    ["Kubernetes", "Introduction", "Features", "Usage",
+                            "Kubernetes Components", "Governance", "Community",
+                            "Support", "Security", "Architecture"],
+            "tables":      ["Alice", "Bob", "Carol", "Dave", "Admin"],
+            "lists":       ["First item", "Second item", "Third item",
+                            "Fourth item", "Fifth item", "Sixth item",
+                            "Seventh item", "Eighth item"],
+            "codeblocks":  ["print(", "def ", "console.log"]
         },
         "should_pass": True
     },
     {
-        "markdown": DATA_DIR / "experiments" / "experiment_ohmyzsh.md",
-        "baseline": DATA_DIR / "baselines" / "experiment_ohmyzsh.json",
+        "markdown":     DATA_DIR / "experiments" / "experiment_ohmyzsh.md",
+        "baseline":     DATA_DIR / "baselines" / "experiment_ohmyzsh.json",
         "expectations": {
-            "headings": ["Oh My Zsh", "Introduction", "Features", "Usage", "Plugin Reference Table", "Themes", "Configuration", "Community Contributors", "Getting Help", "Uninstalling"],
-            "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
-            "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item", "Eighth item"],
-            "codeblocks": ["print(", "def ", "console.log"]
+            "headings":    ["Oh My Zsh", "Introduction", "Features", "Usage",
+                            "Plugin Reference Table", "Themes", "Configuration",
+                            "Community Contributors", "Getting Help", "Uninstalling"],
+            "tables":      ["Alice", "Bob", "Carol", "Dave", "Admin"],
+            "lists":       ["First item", "Second item", "Third item",
+                            "Fourth item", "Fifth item", "Sixth item",
+                            "Seventh item", "Eighth item"],
+            "codeblocks":  ["print(", "def ", "console.log"]
         },
         "should_pass": True
     },
     {
-        "markdown": DATA_DIR / "experiments" / "experiment_fastapi.md",
-        "baseline": DATA_DIR / "baselines" / "experiment_fastapi.json",
+        "markdown":     DATA_DIR / "experiments" / "experiment_fastapi.md",
+        "baseline":     DATA_DIR / "baselines" / "experiment_fastapi.json",
         "expectations": {
-            "headings": ["FastAPI", "Introduction", "Features", "Usage", "Performance Benchmarks", "Sponsors Table", "Interactive Documentation", "Type System", "Security", "Community", "Contributors"],
-            "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
-            "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item"],
-            "codeblocks": ["print(", "def ", "console.log"]
+            "headings":    ["FastAPI", "Introduction", "Features", "Usage",
+                            "Performance Benchmarks", "Sponsors Table",
+                            "Interactive Documentation", "Type System",
+                            "Security", "Community", "Contributors"],
+            "tables":      ["Alice", "Bob", "Carol", "Dave", "Admin"],
+            "lists":       ["First item", "Second item", "Third item",
+                            "Fourth item", "Fifth item", "Sixth item", "Seventh item"],
+            "codeblocks":  ["print(", "def ", "console.log"]
         },
         "should_pass": True
     },
@@ -226,16 +215,10 @@ TEST_CASES = [
         for case in TEST_CASES
     ]
 )
-
 def test_markdown_conversion_cases(markdown_file, baseline_file, expectations, should_pass):
     run_case(markdown_file, baseline_file, expectations, should_pass)
 
 
-# NOTE: test_export_metrics collects results by re-using the already-defined
-# TEST_CASES list. To avoid running every conversion twice (once in
-# test_markdown_conversion_cases and again here), the parametrized test
-# results are cached in a module-level dict the first time run_case() is
-# called and reused here without repeating the full conversion+LLM cycle.
 _results_cache: dict = {}
 
 
@@ -251,10 +234,7 @@ def test_export_metrics():
     METRICS_DIR.mkdir(parents=True, exist_ok=True)
     results = [
         run_case_cached(
-            case["markdown"],
-            case["baseline"],
-            case["expectations"],
-            case["should_pass"]
+            case["markdown"], case["baseline"], case["expectations"], case["should_pass"]
         )
         for case in TEST_CASES
     ]

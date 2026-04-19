@@ -1,0 +1,51 @@
+name: llm-experiment
+
+on:
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Why are you running the LLM experiment?"
+        required: false
+        default: "Manual exploratory run"
+
+jobs:
+  llm-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install LLM dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-llm.txt
+
+      - name: Install core dependencies (needed for PDF generation)
+        run: pip install -r requirements.txt
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore local tools
+        run: dotnet tool restore
+
+      - name: Run LLM quality check
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          python -m llm_experiments.llm_quality_check
+
+      - name: Upload LLM verdicts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-experiment-results
+          path: results/llm-quality-check/
