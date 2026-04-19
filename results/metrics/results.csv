@@ -1,0 +1,12 @@
+file,should_pass,actual_pass,duration_seconds,llm_verdict
+control_headings.md,True,True,5.9412,
+control_tables.md,True,True,5.9413,
+control_lists.md,True,True,5.9134,
+control_codeblocks.md,True,True,5.9148,
+missing_heading.md,False,False,5.9198,
+missing_table_row.md,False,False,5.9213,
+missing_list_item.md,False,False,5.8877,
+missing_codeblock.md,False,False,5.9277,
+experiment_kubernetes.md,True,True,5.9853,
+experiment_ohmyzsh.md,True,True,5.9804,
+experiment_fastapi.md,True,True,5.9792,
