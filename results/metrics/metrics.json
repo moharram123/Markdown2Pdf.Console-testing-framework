@@ -6,15 +6,8 @@
   "regression_detection_accuracy": 1.0,
   "false_positive_rate": 0.0,
   "artifact_stability_note": "Measure by repeating control runs and checking identical verdicts.",
-<<<<<<< HEAD
-  "avg_execution_time_seconds": 4.5536,
-  "total_automated_time_seconds": 50.0898,
+  "avg_execution_time_seconds": 5.9504,
+  "total_automated_time_seconds": 65.454,
   "estimated_manual_time_seconds": 660,
-  "manual_time_reduction": 0.9241
-=======
-  "avg_execution_time_seconds": 5.9837,
-  "total_automated_time_seconds": 65.8203,
-  "estimated_manual_time_seconds": 660,
-  "manual_time_reduction": 0.9003
->>>>>>> 0f9fcc0db600cf1931a81cce9e46d2a2c442f228
+  "manual_time_reduction": 0.9008
 }
