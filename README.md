@@ -58,7 +58,9 @@ Markdown2Pdf.Console-testing-framework/
 │   └── evaluation_metrics.py
 │
 ├── validation_rules/    # Validation logic for structure checks
+├── llm_experiments/    # Optional LLM experiment module (not part of core suite)
 ├── requirements.txt
+├── requirements-llm.txt
 └── pytest.ini
 ```
 
