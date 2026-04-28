@@ -55,4 +55,11 @@ def save_results_csv(results, output_path):
             fieldnames=["file", "should_pass", "actual_pass", "duration_seconds", "llm_verdict"]
         )
         writer.writeheader()
-        writer.writerows(results)
+        for row in results:
+            writer.writerow({
+                "file": row.get("file", ""),
+                "should_pass": row.get("should_pass", ""),
+                "actual_pass": row.get("actual_pass", ""),
+                "duration_seconds": str(row.get("duration_seconds", "")).replace(".", ","),
+                "llm_verdict": row.get("llm_verdict", ""),
+            })
