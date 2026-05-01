@@ -40,4 +40,4 @@ jobs:
             results/generated-pdfs/
             results/test-reports/
             results/metrics/
-            results/diffs/
+            results/diffs4
