@@ -5,39 +5,40 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Install .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.0'
-      
+          dotnet-version: "8.0.x"
+
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Restore .NET tools
         run: dotnet tool restore
-      
+
       - name: Install Python dependencies
         run: pip install -r requirements.txt
-      
+
       - name: Setup Quality Gate
         run: python scripts/setup_quality_gate.py
-      
+
       - name: Run Test Suite
         run: pytest tests --html=results/test-reports/report.html --self-contained-html
-      
+
       - name: Upload Results
-        if: always(4
-        uses: actions/upload-artifact@v3
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: |
             results/generated-pdfs/
             results/test-reports/
             results/metrics/
-            results/diffs4
+            results/diffs/

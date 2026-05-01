@@ -1,0 +1,14 @@
+{
+  "file": "control_tables.md",
+  "expectations": {
+    "headings": [
+      "Usage"
+    ],
+    "tables": [
+      "Alice, Admin",
+      "Bob, User"
+    ],
+    "lists": [],
+    "codeblocks": []
+  }
+}

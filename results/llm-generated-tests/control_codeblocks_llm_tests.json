@@ -1,0 +1,13 @@
+{
+  "file": "control_codeblocks.md",
+  "expectations": {
+    "headings": [
+      "Usage"
+    ],
+    "tables": [],
+    "lists": [],
+    "codeblocks": [
+      "print(\"Hello from Markdown2Pdf\")"
+    ]
+  }
+}

@@ -1,0 +1,211 @@
+[
+  {
+    "file": "control_headings.md",
+    "expectations": {
+      "headings": [
+        "Introduction",
+        "Features"
+      ],
+      "tables": [],
+      "lists": [],
+      "codeblocks": []
+    }
+  },
+  {
+    "file": "control_tables.md",
+    "expectations": {
+      "headings": [
+        "Usage"
+      ],
+      "tables": [
+        "Alice, Admin",
+        "Bob, User"
+      ],
+      "lists": [],
+      "codeblocks": []
+    }
+  },
+  {
+    "file": "control_lists.md",
+    "expectations": {
+      "headings": [
+        "Features"
+      ],
+      "tables": [],
+      "lists": [
+        "First item",
+        "Second item",
+        "Third item"
+      ],
+      "codeblocks": []
+    }
+  },
+  {
+    "file": "control_codeblocks.md",
+    "expectations": {
+      "headings": [
+        "Usage"
+      ],
+      "tables": [],
+      "lists": [],
+      "codeblocks": [
+        "print(\"Hello from Markdown2Pdf\")"
+      ]
+    }
+  },
+  {
+    "file": "experiment_kubernetes.md",
+    "expectations": {
+      "headings": [
+        "Kubernetes",
+        "Introduction",
+        "Features",
+        "Usage",
+        "Kubernetes Components",
+        "Governance",
+        "Community",
+        "Support",
+        "Security",
+        "Architecture"
+      ],
+      "tables": [
+        "Alice, Cluster Administrator",
+        "Bob, Developer",
+        "Carol, DevOps Engineer",
+        "Dave, Admin",
+        "Alice, CNCF Technical Oversight",
+        "Bob, Kubernetes Steering Committee",
+        "Alice, Enterprise Support",
+        "Bob, Community Maintainer",
+        "Carol, Admin"
+      ],
+      "lists": [
+        "First item: Automatic bin packing based on resource requirements",
+        "Second item: Self-healing restarts containers that fail",
+        "Third item: Horizontal scaling with a simple command",
+        "Fourth item: Service discovery and load balancing",
+        "Fifth item: Automated rollouts and rollbacks",
+        "Sixth item: Secret and configuration management",
+        "Seventh item: Storage orchestration for all storage systems",
+        "Eighth item: Batch execution for CI workloads",
+        "First item: Slack at kubernetes.slack.com",
+        "Second item: Stack Overflow with tag kubernetes",
+        "Third item: Forum at discuss.kubernetes.io",
+        "First item: Control Plane manages the overall state",
+        "Second item: Worker Nodes run containerized applications",
+        "Third item: etcd is the key-value store",
+        "Fourth item: API Server is the control plane front end"
+      ],
+      "codeblocks": [
+        "def install_kubectl():\n    print(\"Installing kubectl...\")",
+        "def create_deployment():\n    print(\"kubectl create deployment hello-node\")\n    def expose():\n        print(\"kubectl expose deployment hello-node --port=8080\")",
+        "function scaleDeployment() {\n    console.log(\"kubectl scale deployment hello-node --replicas=3\");\n}",
+        "def report_security():\n    print(\"Email: security@kubernetes.io\")\n    def encrypt():\n        print(\"Use the Kubernetes PGP key\")",
+        "def get_architecture():\n    print(\"Control Plane: kube-apiserver, etcd\")\n    def worker():\n        print(\"Worker Node: kubelet, kube-proxy\")"
+      ]
+    }
+  },
+  {
+    "file": "experiment_ohmyzsh.md",
+    "expectations": {
+      "headings": [
+        "Oh My Zsh",
+        "Introduction",
+        "Features",
+        "Usage",
+        "Plugin Reference Table",
+        "Themes",
+        "Configuration",
+        "Community Contributors",
+        "Getting Help",
+        "Uninstalling"
+      ],
+      "tables": [
+        "Alice | Plugin Maintainer",
+        "Bob | Theme Developer",
+        "Carol | Core Contributor",
+        "Dave | Admin",
+        "Alice | Lead Maintainer",
+        "Bob | Community Manager",
+        "Carol | Documentation Writer",
+        "Dave | Admin"
+      ],
+      "lists": [
+        "Auto-update tools to keep your installation fresh",
+        "Over 300 optional plugins including git, docker, kubectl",
+        "Over 140 themes to customize your terminal",
+        "Auto-update tool to keep installation up to date",
+        "Helper functions and aliases for daily use",
+        "Plugin management system for extensibility",
+        "Community-contributed themes and plugins",
+        "Cross-platform support for macOS, Linux, and WSL",
+        "robbyrussell is the default clean theme",
+        "agnoster is powerline-style with git info",
+        "powerlevel10k is highly customizable and fast",
+        "GitHub Issues for bugs and feature requests",
+        "Discord community chat server",
+        "Wiki for comprehensive documentation"
+      ],
+      "codeblocks": [
+        "def install_ohmyzsh():\n    print(\"sh -c install.sh from ohmyzsh repository\")",
+        "def configure_plugins():\n    print(\"plugins=(git docker kubectl python pip)\")\n    def apply():\n        print(\"source ~/.zshrc\")",
+        "function setTheme() {\n    console.log(\"Setting ZSH_THEME to robbyrussell\");\n}",
+        "def advanced_config():\n    print(\"export ZSH=$HOME/.oh-my-zsh\")\n    print(\"export ZSH_THEME=agnoster\")\n    def update():\n        print(\"export UPDATE_ZSH_DAYS=13\")",
+        "def uninstall():\n    print(\"uninstall_oh_my_zsh\")\n    def cleanup():\n        print(\"Removing ~/.oh-my-zsh directory\")"
+      ]
+    }
+  },
+  {
+    "file": "experiment_fastapi.md",
+    "expectations": {
+      "headings": [
+        "FastAPI",
+        "Introduction",
+        "Features",
+        "Usage",
+        "Performance Benchmarks",
+        "Sponsors Table",
+        "Interactive Documentation",
+        "Type System",
+        "Security",
+        "Community",
+        "Contributors"
+      ],
+      "tables": [
+        "Alice, Performance Engineer",
+        "Bob, Benchmark Analyst",
+        "Carol, Admin",
+        "Alice, Gold Sponsor",
+        "Bob, Silver Sponsor",
+        "Carol, Individual Contributor",
+        "Dave, Admin",
+        "Alice, Core Developer",
+        "Bob, Documentation Maintainer",
+        "Carol, Plugin Author",
+        "Dave, Admin"
+      ],
+      "lists": [
+        "First item: Fast to code increases development speed by 200 to 300 percent",
+        "Second item: Fewer bugs reduces about 40 percent of human induced errors",
+        "Third item: Intuitive with great editor support and autocompletion",
+        "Fourth item: Easy to use and designed for quick learning",
+        "Fifth item: Short code minimizes duplication across the codebase",
+        "Sixth item: Robust with production-ready automatic interactive docs",
+        "Seventh item: Standards-based on OpenAPI and JSON Schema",
+        "First item: Swagger UI available at /docs",
+        "Second item: ReDoc available at /redoc",
+        "Third item: OpenAPI JSON available at /openapi.json",
+        "First item: GitHub Discussions for questions and ideas",
+        "Second item: Discord for the FastAPI community",
+        "Third item: Twitter follow tiangolo for updates"
+      ],
+      "codeblocks": [
+        "def install():\n    print(\"pip install fastapi\")\n    print(\"pip install uvicorn[standard]\")",
+        "def create_api():\n    print(\"from fastapi import FastAPI\")\n    print(\"app = FastAPI()\")\n    def add_route():\n        print(\"@app.get('/')\")\n        print(\"def read_root(): return Hello World\")",
+        "function fetchData() {\n    console.log(\"fetch http://127.0.0.1:8000/items/5\");\n}",
+        "def typed_endpoint():\n    print(\"from pydantic import BaseModel\")\n    def model():\n        print(\"class Item(BaseModel): name str, price float\")",
+        "def security_example():\n    print(\"from fastapi.security import OAuth2PasswordBearer\")\n    def verify():\n        print(\"async def get_current_user(token: str):\")"
+      ]
+    }
+  }
+]

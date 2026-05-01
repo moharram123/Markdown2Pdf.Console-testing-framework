@@ -1,0 +1,362 @@
+{
+  "summary": {
+    "total_files": 7,
+    "average_coverage": 0.96,
+    "conclusion": "LLM-generated tests cover 96% of manually written tests on average"
+  },
+  "file_results": [
+    {
+      "file": "control_headings.md",
+      "categories": {
+        "headings": {
+          "manual_count": 2,
+          "llm_count": 2,
+          "matched": [
+            "Introduction",
+            "Features"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "codeblocks": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 1.0
+    },
+    {
+      "file": "control_tables.md",
+      "categories": {
+        "headings": {
+          "manual_count": 0,
+          "llm_count": 1,
+          "matched": [],
+          "extra_llm_found": [
+            "Usage"
+          ],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 3,
+          "llm_count": 2,
+          "matched": [
+            "Admin",
+            "Alice",
+            "Bob"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "codeblocks": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 1.0
+    },
+    {
+      "file": "control_lists.md",
+      "categories": {
+        "headings": {
+          "manual_count": 0,
+          "llm_count": 1,
+          "matched": [],
+          "extra_llm_found": [
+            "Features"
+          ],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 3,
+          "llm_count": 3,
+          "matched": [
+            "Third item",
+            "Second item",
+            "First item"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "codeblocks": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 1.0
+    },
+    {
+      "file": "control_codeblocks.md",
+      "categories": {
+        "headings": {
+          "manual_count": 0,
+          "llm_count": 1,
+          "matched": [],
+          "extra_llm_found": [
+            "Usage"
+          ],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 0,
+          "llm_count": 0,
+          "matched": [],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "codeblocks": {
+          "manual_count": 1,
+          "llm_count": 1,
+          "matched": [
+            "print("
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 1.0
+    },
+    {
+      "file": "experiment_kubernetes.md",
+      "categories": {
+        "headings": {
+          "manual_count": 10,
+          "llm_count": 10,
+          "matched": [
+            "Security",
+            "Architecture",
+            "Governance",
+            "Features",
+            "Kubernetes",
+            "Usage",
+            "Community",
+            "Introduction",
+            "Support",
+            "Kubernetes Components"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 5,
+          "llm_count": 9,
+          "matched": [
+            "Bob",
+            "Carol",
+            "Alice",
+            "Dave",
+            "Admin"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 8,
+          "llm_count": 15,
+          "matched": [
+            "Second item",
+            "Sixth item",
+            "Fourth item",
+            "Eighth item",
+            "First item",
+            "Seventh item",
+            "Third item",
+            "Fifth item"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "codeblocks": {
+          "manual_count": 3,
+          "llm_count": 5,
+          "matched": [
+            "print(",
+            "console.log",
+            "def "
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 1.0
+    },
+    {
+      "file": "experiment_ohmyzsh.md",
+      "categories": {
+        "headings": {
+          "manual_count": 10,
+          "llm_count": 10,
+          "matched": [
+            "Community Contributors",
+            "Uninstalling",
+            "Getting Help",
+            "Oh My Zsh",
+            "Features",
+            "Usage",
+            "Plugin Reference Table",
+            "Introduction",
+            "Configuration",
+            "Themes"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 5,
+          "llm_count": 8,
+          "matched": [
+            "Bob",
+            "Carol",
+            "Alice",
+            "Dave",
+            "Admin"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 8,
+          "llm_count": 14,
+          "matched": [],
+          "extra_llm_found": [
+            "Auto-update tools to keep your installation fresh",
+            "Over 300 optional plugins including git, docker, kubectl",
+            "Over 140 themes to customize your terminal",
+            "Auto-update tool to keep installation up to date",
+            "Helper functions and aliases for daily use",
+            "Plugin management system for extensibility",
+            "Community-contributed themes and plugins",
+            "Cross-platform support for macOS, Linux, and WSL",
+            "robbyrussell is the default clean theme",
+            "agnoster is powerline-style with git info",
+            "powerlevel10k is highly customizable and fast",
+            "GitHub Issues for bugs and feature requests",
+            "Discord community chat server",
+            "Wiki for comprehensive documentation"
+          ],
+          "coverage": 0.0
+        },
+        "codeblocks": {
+          "manual_count": 3,
+          "llm_count": 5,
+          "matched": [
+            "print(",
+            "console.log",
+            "def "
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 0.75
+    },
+    {
+      "file": "experiment_fastapi.md",
+      "categories": {
+        "headings": {
+          "manual_count": 11,
+          "llm_count": 11,
+          "matched": [
+            "Security",
+            "Interactive Documentation",
+            "Performance Benchmarks",
+            "Features",
+            "Sponsors Table",
+            "Usage",
+            "Community",
+            "Contributors",
+            "Introduction",
+            "FastAPI",
+            "Type System"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "tables": {
+          "manual_count": 5,
+          "llm_count": 11,
+          "matched": [
+            "Bob",
+            "Carol",
+            "Alice",
+            "Dave",
+            "Admin"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "lists": {
+          "manual_count": 7,
+          "llm_count": 13,
+          "matched": [
+            "Second item",
+            "Sixth item",
+            "Fourth item",
+            "First item",
+            "Seventh item",
+            "Third item",
+            "Fifth item"
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        },
+        "codeblocks": {
+          "manual_count": 3,
+          "llm_count": 5,
+          "matched": [
+            "print(",
+            "console.log",
+            "def "
+          ],
+          "extra_llm_found": [],
+          "coverage": 1.0
+        }
+      },
+      "overall_coverage": 1.0
+    }
+  ]
+}

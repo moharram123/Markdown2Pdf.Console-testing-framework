@@ -1,0 +1,53 @@
+{
+  "file": "experiment_fastapi.md",
+  "expectations": {
+    "headings": [
+      "FastAPI",
+      "Introduction",
+      "Features",
+      "Usage",
+      "Performance Benchmarks",
+      "Sponsors Table",
+      "Interactive Documentation",
+      "Type System",
+      "Security",
+      "Community",
+      "Contributors"
+    ],
+    "tables": [
+      "Alice, Performance Engineer",
+      "Bob, Benchmark Analyst",
+      "Carol, Admin",
+      "Alice, Gold Sponsor",
+      "Bob, Silver Sponsor",
+      "Carol, Individual Contributor",
+      "Dave, Admin",
+      "Alice, Core Developer",
+      "Bob, Documentation Maintainer",
+      "Carol, Plugin Author",
+      "Dave, Admin"
+    ],
+    "lists": [
+      "First item: Fast to code increases development speed by 200 to 300 percent",
+      "Second item: Fewer bugs reduces about 40 percent of human induced errors",
+      "Third item: Intuitive with great editor support and autocompletion",
+      "Fourth item: Easy to use and designed for quick learning",
+      "Fifth item: Short code minimizes duplication across the codebase",
+      "Sixth item: Robust with production-ready automatic interactive docs",
+      "Seventh item: Standards-based on OpenAPI and JSON Schema",
+      "First item: Swagger UI available at /docs",
+      "Second item: ReDoc available at /redoc",
+      "Third item: OpenAPI JSON available at /openapi.json",
+      "First item: GitHub Discussions for questions and ideas",
+      "Second item: Discord for the FastAPI community",
+      "Third item: Twitter follow tiangolo for updates"
+    ],
+    "codeblocks": [
+      "def install():\n    print(\"pip install fastapi\")\n    print(\"pip install uvicorn[standard]\")",
+      "def create_api():\n    print(\"from fastapi import FastAPI\")\n    print(\"app = FastAPI()\")\n    def add_route():\n        print(\"@app.get('/')\")\n        print(\"def read_root(): return Hello World\")",
+      "function fetchData() {\n    console.log(\"fetch http://127.0.0.1:8000/items/5\");\n}",
+      "def typed_endpoint():\n    print(\"from pydantic import BaseModel\")\n    def model():\n        print(\"class Item(BaseModel): name str, price float\")",
+      "def security_example():\n    print(\"from fastapi.security import OAuth2PasswordBearer\")\n    def verify():\n        print(\"async def get_current_user(token: str):\")"
+    ]
+  }
+}

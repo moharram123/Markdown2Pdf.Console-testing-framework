@@ -1,0 +1,12 @@
+{
+  "file": "control_headings.md",
+  "expectations": {
+    "headings": [
+      "Introduction",
+      "Features"
+    ],
+    "tables": [],
+    "lists": [],
+    "codeblocks": []
+  }
+}
