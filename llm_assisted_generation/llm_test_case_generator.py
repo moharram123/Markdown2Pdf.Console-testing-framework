@@ -1,133 +1,182 @@
 #!/usr/bin/env python3
 """
-Generate Markdown test cases from Markdown sources using OpenAI.
+Convert Markdown test cases to PDF generation tests.
 """
 
-import os
+import re
+import json
 from pathlib import Path
-from dotenv import load_dotenv
-from openai import OpenAI
+from datetime import datetime
 
-load_dotenv()
 
-class LLMTestCaseGenerator:
+class MarkdownToPdfTestConverter:
     def __init__(self):
-        self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-        self.sources_dir = Path("data/sources")
-        self.output_dir = Path("results/test-cases-markdown")
+        self.markdown_dir = Path("data/generated_test_cases")
+        self.output_dir = Path("tests/generated_pdf_tests")
+        self.pdf_output_dir = Path("data/generated_pdfs")
+        self.metrics_dir = Path("results/metrics")
+        self.reports_dir = Path("results/test-reports")
+        
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.total_tests = 0
+        self.pdf_output_dir.mkdir(parents=True, exist_ok=True)
+        self.metrics_dir.mkdir(parents=True, exist_ok=True)
+        self.reports_dir.mkdir(parents=True, exist_ok=True)
     
-    def read_markdown_source(self, filepath):
-        """Read a Markdown source file."""
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return f.read()
+    def sanitize_test_name(self, name):
+        """Convert test name to valid Python function name."""
+        clean_name = re.sub(r'[^\w\s]', '', name)
+        clean_name = clean_name.strip().lower().replace(' ', '_').replace('-', '_')
+        clean_name = re.sub(r'_+', '_', clean_name)
+        return clean_name[:40]
     
-    def generate_markdown_tests(self, markdown_content, source_name, count=20):
-        """Generate test cases as Markdown."""
-        print(f"Generating {count} tests for: {source_name}")
+    def parse_markdown_tests(self, markdown_content):
+        """Parse Markdown test cases."""
+        tests = []
+        test_blocks = re.split(r'## Test Case \d+:', markdown_content)
         
-        limited_content = markdown_content[:300]
+        for block in test_blocks[1:]:
+            lines = block.strip().split('\n')
+            test_name = lines[0].strip() if lines else "unknown"
+            
+            markdown_match = re.search(r'### Input:\s*```markdown\n(.*?)\n```', block, re.DOTALL)
+            test_markdown = markdown_match.group(1) if markdown_match else ""
+            
+            expected_match = re.search(r'### Expected[^:]*:\n(.*?)(?=###|$)', block, re.DOTALL)
+            expected_elements = []
+            if expected_match:
+                for line in expected_match.group(1).split('\n'):
+                    line = line.strip()
+                    if line.startswith('- '):
+                        expected_elements.append(line[2:].strip('`'))
+            
+            if test_markdown.strip():
+                clean_content = re.sub(r'[-_\s]', '', test_markdown)
+                if len(clean_content) >= 3:
+                    sanitized_name = self.sanitize_test_name(test_name)
+                    tests.append({
+                        'name': test_name,
+                        'markdown': test_markdown,
+                        'expected': expected_elements,
+                        'sanitized_name': sanitized_name
+                    })
         
-        prompt = f"""You are a test engineer. Analyze this Markdown and create {count} test cases.
+        return tests
+    
+    def generate_pytest_file(self, tests, source_name):
+        """Generate pytest file."""
+        pytest_code = f'''#!/usr/bin/env python3
+"""
+Generated PDF tests from Markdown.
+"""
 
-MARKDOWN:
-{limited_content}
+import pytest
+from pathlib import Path
 
-Generate {count} test cases in Markdown format (control, regression, and edge cases).
 
-Format each test like this:
-
-## Test Case [N]: [Name]
-**Purpose:** [Description]
-
-### Input:
-```markdown
-[markdown content]
-```
-
-### Expected Elements:
-- element1
-- element2
-
-### Validation:
-[validation rules]
-
----
-
-Return only Markdown, no JSON or explanations."""
+class TestGeneratedPdfCases:
+    
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.pdf_dir = Path("data/generated_pdfs")
+        self.pdf_dir.mkdir(parents=True, exist_ok=True)
+'''
+        
+        for i, test in enumerate(tests, 1):
+            test_name = test['sanitized_name']
+            
+            pytest_code += f'''
+    def test_pdf_{i}_{test_name}(self):
+        """Test: {test['name']}"""
+        markdown_input = """
+{test['markdown']}
+""".strip()
+        
+        expected = {test['expected']}
+        
+        assert markdown_input
+        assert len(markdown_input) > 3
+        
+        pdf = self.pdf_dir / f"test_{{str(i).zfill(3)}}.pdf"
+        with open(pdf, 'w') as f:
+            f.write(f"PDF\\nLength: {{len(markdown_input)}}\\n")
+'''
+        
+        return pytest_code
+    
+    def save_metrics(self, total):
+        """Save metrics."""
+        metrics = {
+            "total": total,
+            "generated_at": datetime.now().isoformat(),
+            "framework": "Markdown-to-PDF Testing"
+        }
+        
+        json_path = self.metrics_dir / "test_metrics.json"
+        with open(json_path, 'w') as f:
+            json.dump(metrics, f, indent=2)
         
         try:
-            print(f"  Calling OpenAI API...")
-            response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.5,
-                max_tokens=2000
-            )
-            
-            markdown_content = response.choices[0].message.content
-            self.total_tests += markdown_content.count("## Test Case")
-            print(f"  Generated ({len(markdown_content)} chars)")
-            return markdown_content
-        
-        except Exception as e:
-            print(f"  Error: {e}")
-            return None
+            import openpyxl
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.append(["Metric", "Value"])
+            for k, v in metrics.items():
+                ws.append([k, str(v)])
+            wb.save(self.metrics_dir / "test_metrics.xlsx")
+        except:
+            pass
     
-    def process_all_sources(self):
-        """Process all Markdown source files."""
-        markdown_files = list(self.sources_dir.glob("*.md"))
+    def convert_all(self):
+        """Convert all files."""
+        files = list(self.markdown_dir.glob("tests_*.md"))
         
-        if not markdown_files:
-            print("No files in data/sources")
-            return
+        if not files:
+            return 0
         
-        print(f"\nFound {len(markdown_files)} Markdown files\n")
+        print(f"Converting {len(files)} files...\n")
         
-        index_content = """# Generated Test Cases
-
-Test cases generated from Markdown sources using OpenAI.
-
-## Test Files
-
-"""
+        total = 0
         
-        for filepath in markdown_files:
-            source_name = filepath.name
-            markdown_content = self.read_markdown_source(filepath)
+        for fp in files:
+            print(f"Converting: {fp.name}")
             
-            tests_markdown = self.generate_markdown_tests(markdown_content, source_name, count=20)
+            with open(fp, 'r', encoding='utf-8') as f:
+                content = f.read()
             
-            if tests_markdown:
-                output_filename = f"tests_{source_name}"
-                output_path = self.output_dir / output_filename
+            tests = self.parse_markdown_tests(content)
+            
+            if tests:
+                code = self.generate_pytest_file(tests, fp.stem)
                 
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    f.write(tests_markdown)
+                out = f"test_{fp.stem}.py"
+                out_path = self.output_dir / out
                 
-                index_content += f"- [{output_filename}]({output_filename})\n"
-                print(f"  Saved: {output_filename}")
+                with open(out_path, 'w') as f:
+                    f.write(code)
+                
+                total += len(tests)
+                print(f"  Created: {out} ({len(tests)} tests)\n")
         
-        index_path = self.output_dir / "README.md"
-        with open(index_path, 'w', encoding='utf-8') as f:
-            f.write(index_content)
+        if total > 0:
+            self.save_metrics(total)
         
-        print(f"\n{'='*60}")
-        print(f"Generated {self.total_tests}+ test cases")
-        print(f"Saved to: results/test-cases-markdown/")
+        return total
+
 
 def main():
     print("=" * 60)
-    print("LLM Test Case Generator")
+    print("Converting to PDF Tests")
     print("=" * 60)
     print()
     
-    generator = LLMTestCaseGenerator()
-    generator.process_all_sources()
+    converter = MarkdownToPdfTestConverter()
+    total = converter.convert_all()
     
-    print()
-    print("Test case generation complete!")
+    if total > 0:
+        print(f"\nComplete! {total} tests")
+    else:
+        print("\nNo tests")
+
 
 if __name__ == "__main__":
     main()

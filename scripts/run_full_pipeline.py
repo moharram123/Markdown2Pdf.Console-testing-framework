@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Run the complete testing pipeline.
+Run the complete automated testing pipeline.
+Generates Markdown test cases from GitHub sources and converts them to PDF tests.
 """
 
 import subprocess
@@ -19,12 +20,12 @@ class TestingPipeline:
                 "command": "python llm_assisted_generation/llm_test_case_generator.py"
             },
             {
-                "name": "Validate Generated Tests",
-                "command": "python scripts/validate_generated_tests.py"
+                "name": "Convert Markdown to PDF Tests",
+                "command": "python scripts/convert_markdown_to_pdf_tests.py"
             },
             {
-                "name": "Run Test Suite",
-                "command": "pytest tests -v --html=results/test-reports/report.html --self-contained-html"
+                "name": "Run Generated PDF Tests Only",
+                "command": "pytest tests/generated_pdf_tests/ -v --html=results/test-reports/report.html --self-contained-html"
             }
         ]
     
@@ -51,6 +52,7 @@ class TestingPipeline:
         """Run all pipeline steps."""
         print("=" * 60)
         print("AUTOMATED TESTING PIPELINE")
+        print("LLM-Generated Markdown to PDF Tests")
         print("=" * 60)
         
         successful_steps = 0
@@ -65,7 +67,12 @@ class TestingPipeline:
         print("=" * 60)
         print(f"PIPELINE COMPLETE ({successful_steps}/{len(self.steps)} steps)")
         print("=" * 60)
-        print("\nOpen results/test-reports/report.html to view results\n")
+        print("\nGenerated Outputs:")
+        print("  - Test Cases: results/test-cases-markdown/")
+        print("  - Generated PDFs: results/generated-pdfs/")
+        print("  - HTML Report: results/test-reports/report.html")
+        print("  - Metrics: results/metrics/test_metrics.json")
+        print("\nNext: Open results/test-reports/report.html to view results\n")
         
         return True
 

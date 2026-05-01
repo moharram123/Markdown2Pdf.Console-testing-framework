@@ -1,44 +1,61 @@
-name: Automated PDF Quality Gate
+name: Automated PDF Quality Gate with LLM
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install .NET
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Restore .NET tools
+          dotnet-version: '8.0.x'
+      
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install openai python-dotenv
+      
+      - name: Restore .NET Tools
         run: dotnet tool restore
-
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
+      
       - name: Setup Quality Gate
         run: python scripts/setup_quality_gate.py
-
-      - name: Run Test Suite
-        run: pytest tests --html=results/test-reports/report.html --self-contained-html
-
-      - name: Upload Results
+      
+      - name: 📥 Download Markdown Sources
+        run: python scripts/download_markdown_sources.py
+      
+      - name: 🤖 Generate Test Cases with LLM
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python llm_experiments/llm_test_case_generator.py
+      
+      - name: 🔍 Validate Generated Tests
+        run: python scripts/validate_generated_tests.py
+      
+      - name: 🧪 Run Complete Test Suite
+        run: pytest tests llm_experiments/generated_test_cases -v --html=results/test-reports/report.html --self-contained-html
+      
+      - name: 📊 Upload Test Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: |
-            results/generated-pdfs/
             results/test-reports/
+            results/generated-pdfs/
             results/metrics/
-            results/diffs/

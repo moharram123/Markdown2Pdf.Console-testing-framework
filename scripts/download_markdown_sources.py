@@ -4,6 +4,7 @@ Download Markdown sources from GitHub and other sources.
 """
 
 import os
+import re
 import json
 import requests
 from pathlib import Path
@@ -17,7 +18,7 @@ class MarkdownSourceDownloader:
         self.metadata = []
     
     def download_from_urls(self, urls):
-        """Download Markdown files from direct URLs."""
+        """Download Markdown files from direct URLs with unique names."""
         print(f"Downloading {len(urls)} files...")
         
         for url in urls:
@@ -25,7 +26,15 @@ class MarkdownSourceDownloader:
                 response = requests.get(url, timeout=10)
                 response.raise_for_status()
                 
-                filename = url.split('/')[-1]
+                # Extract repository owner and name for unique filename
+                match = re.search(r'github\.com/([^/]+)/([^/]+)/', url)
+                if match:
+                    owner = match.group(1)
+                    repo = match.group(2)
+                    filename = f"{owner}_{repo}.md"
+                else:
+                    filename = url.split('/')[-1]
+                
                 filepath = self.sources_dir / filename
                 
                 with open(filepath, 'w', encoding='utf-8') as f:
@@ -74,7 +83,6 @@ class MarkdownSourceDownloader:
         
         sample_sources = [
             "https://raw.githubusercontent.com/adam-p/markdown-here/master/README.md",
-            "https://raw.githubusercontent.com/torvalds/linux/master/README.md",
         ]
         
         return sample_sources

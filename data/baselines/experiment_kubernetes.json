@@ -1,6 +1,0 @@
-{
-  "headings": ["Kubernetes", "Introduction", "Features", "Usage", "Kubernetes Components", "Governance", "Community", "Support", "Security", "Architecture"],
-  "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
-  "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item", "Eighth item"],
-  "codeblocks": ["print(", "def ", "console.log"]
-}

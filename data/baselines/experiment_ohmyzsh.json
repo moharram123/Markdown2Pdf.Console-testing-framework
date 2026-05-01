@@ -1,6 +1,0 @@
-{
-  "headings": ["Oh My Zsh", "Introduction", "Features", "Usage", "Plugin Reference Table", "Themes", "Configuration", "Community Contributors", "Getting Help", "Uninstalling", "Community", "Contributors"],
-  "tables": ["Alice", "Bob", "Carol", "Dave", "Admin"],
-  "lists": ["First item", "Second item", "Third item", "Fourth item", "Fifth item", "Sixth item", "Seventh item", "Eighth item"],
-  "codeblocks": ["print(", "def ", "console.log"]
-}
