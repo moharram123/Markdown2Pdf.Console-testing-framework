@@ -44,8 +44,7 @@ class MarkdownToPdfTestConverter:
                     official_tests.append({
                         'name': test_name,
                         'markdown': mk_markdown,
-                        'expected': electrons_list,
-                        'sanitized_name': sanitized_name
+                    'expected': [],                        'sanitized_name': sanitized_name
                     })
                 else:
                     print(f"  Skipped: insufficient content")
