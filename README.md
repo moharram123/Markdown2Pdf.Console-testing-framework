@@ -116,7 +116,59 @@ Test process:
 The baseline approach is intentionally kept simple to keep the system understandable and manageable for a Bachelor thesis.
 
 ---
+## Automated Quality Gate Setup
 
+The framework includes an automated setup script to reduce manual effort:
+
+```bash
+python scripts/setup_quality_gate.py
+```
+
+This script:
+- Creates required folder structure automatically
+- Verifies all project dependencies are present
+- Runs fully offline with no external dependencies
+- Takes less than 1 second to complete
+
+**No manual folder creation needed.**
+
+## How the Quality Gate Works
+
+The CI/CD pipeline is fully automated:
+
+1. **Setup Phase** — Project structure is verified automatically via `setup_quality_gate.py`
+2. **Test Phase** — Pytest runs all conversion and validation tests
+3. **Report Phase** — Results are generated and uploaded as artifacts
+4. **Quality Gate** — Pipeline fails if any regression is detected, blocking merges
+
+Developers only need to push code. Everything else is automatic.
+
+## Optional: LLM-Assisted Test Enrichment
+
+For expanding the test dataset beyond manually written cases, optional LLM modules are available in `llm_experiments/`.
+
+These can generate additional Markdown test cases and evaluate PDF readability:
+
+```bash
+pip install -r requirements-llm.txt
+export OPENAI_API_KEY=your_key
+
+# Generate synthetic Markdown test cases
+python llm_experiments/generate_llm_test_cases.py --count 20
+
+# Run tests on generated files
+python llm_experiments/run_llm_test_suite.py
+
+# Optional: Check PDF readability with LLM
+python llm_experiments/llm_quality_check.py
+```
+
+**Important notes:**
+- This is experimental and optional
+- LLM outputs are non-deterministic
+- Generated cases are for exploratory testing only
+- The deterministic test suite is the authoritative baseline
+- LLM is NOT part of the CI/CD pipeline
 ## How to Run
 
 ### 1. Install dependencies

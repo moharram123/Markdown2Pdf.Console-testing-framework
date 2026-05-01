@@ -1,69 +1,43 @@
-name: quality-gate
+name: Automated PDF Quality Gate
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-
-permissions:
-  contents: write
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+      
+      - name: Install .NET
+        uses: actions/setup-dotnet@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
+          dotnet-version: '6.0'
+      
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: Restore local tools
+          python-version: '3.11'
+      
+      - name: Restore .NET tools
         run: dotnet tool restore
-
-      - name: Install core dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Create result folders
-        run: |
-          mkdir -p results/generated-pdfs
-          mkdir -p results/test-reports
-          mkdir -p results/metrics
-          mkdir -p results/diffs
-
-      - name: Run core test suite
-        run: |
-          pytest tests --html=results/test-reports/report.html --self-contained-html
-
-      - name: Upload artifacts
+      
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      
+      - name: Setup Quality Gate
+        run: python scripts/setup_quality_gate.py
+      
+      - name: Run Test Suite
+        run: pytest tests --html=results/test-reports/report.html --self-contained-html
+      
+      - name: Upload Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: quality-gate-artifacts
-          path: results/
-
-      - name: Commit results back to repo
-        if: always()
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git reset --soft origin/main
-          git add results/
-          git diff --staged --quiet || git commit -m "ci: update test results [skip actions]"
-          git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}/
+          name: test-results
+          path: |
+            results/generated-pdfs/
+            results/test-reports/
+            results/metrics/
+            results/diffs/
