@@ -36,7 +36,6 @@ REQUIRED_FOLDERS = [
     "results/diffs",
     "tests",
     "validation_rules",
-    "llm_experiments",
 ]
 
 OPTIONAL_FOLDERS = [
