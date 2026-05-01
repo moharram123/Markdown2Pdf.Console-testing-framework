@@ -1,0 +1,23 @@
+{
+  "headings": [
+    "Introduction to Docker",
+    "Key Features of Docker",
+    "Advantages of Using Docker",
+    "Getting Started with Docker"
+  ],
+  "tables": [
+    "Description",
+    "Isolates applications and their dependencies in containers.",
+    "Run containers on any system that supports Docker.",
+    "Easily scale applications up or down based on demand.",
+    "Keep track of changes and versions of containers."
+  ],
+  "lists": [
+    "**Efficiency**: Containers share the same OS kernel, making them lightweight and fast.",
+    "**Consistency**: Ensures that applications run the same way in development, testing, and production.",
+    "**Isolation**: Each container runs in its own environment, preventing conflicts between applications."
+  ],
+  "codeblocks": [
+    "docker --version"
+  ]
+}

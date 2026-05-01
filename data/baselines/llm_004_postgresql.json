@@ -1,0 +1,28 @@
+{
+  "headings": [
+    "Introduction to PostgreSQL",
+    "Features of PostgreSQL",
+    "Comparison with Other Databases",
+    "Getting Started with PostgreSQL",
+    "Example of a Basic SQL Query"
+  ],
+  "tables": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "Yes",
+    "Yes (with InnoDB)",
+    "Yes"
+  ],
+  "lists": [
+    "Support for advanced data types (JSON, XML, etc.)",
+    "ACID compliance for transactions",
+    "Extensible and customizable",
+    "Support for concurrent connections",
+    "Strong community support and documentation"
+  ],
+  "codeblocks": [
+    "initdb -D /path/to/your/data/directory",
+    "CREATE TABLE employees ("
+  ]
+}
