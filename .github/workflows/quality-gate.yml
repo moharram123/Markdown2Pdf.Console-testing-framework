@@ -32,7 +32,7 @@ jobs:
         run: pytest tests --html=results/test-reports/report.html --self-contained-html
       
       - name: Upload Results
-        if: always()
+        if: always(4
         uses: actions/upload-artifact@v3
         with:
           name: test-results
