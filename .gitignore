@@ -246,3 +246,6 @@ results/diffs/*
 
 # Environment variables
 .env
+
+!scripts/
+!scripts/setup_quality_gate.py

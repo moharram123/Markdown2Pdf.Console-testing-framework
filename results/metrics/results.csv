@@ -1,26 +1,12 @@
 file,should_pass,actual_pass,duration_seconds,llm_verdict
-<<<<<<< HEAD
-control_headings.md,True,True,"9,6448",PASS
-control_tables.md,True,True,"7,5837",PASS
-control_lists.md,True,True,"7,3513",PASS
-control_codeblocks.md,True,True,"7,4546",PASS
-missing_heading.md,False,False,"7,7016",PASS
-missing_table_row.md,False,False,"7,6884",PASS
-missing_list_item.md,False,False,"7,5556",PASS
-missing_codeblock.md,False,False,"7,5765",PASS
-experiment_kubernetes.md,True,True,"7,5718",PASS
-experiment_ohmyzsh.md,True,True,"7,4773",PASS
-experiment_fastapi.md,True,True,"7,695",PASS
-=======
-control_headings.md,True,True,"9,9393",PASS
-control_tables.md,True,True,"6,2745",PASS
-control_lists.md,True,True,"5,9965",PASS
-control_codeblocks.md,True,True,"6,0305",PASS
-missing_heading.md,False,False,"5,9868",PASS
-missing_table_row.md,False,False,"6,0101",PASS
-missing_list_item.md,False,False,"5,9771",PASS
-missing_codeblock.md,False,False,"6,0029",PASS
-experiment_kubernetes.md,True,True,"6,0979",PASS
-experiment_ohmyzsh.md,True,True,"6,046",PASS
-experiment_fastapi.md,True,True,"6,0925",PASS
->>>>>>> 6b3f869a037e52a947e7942f208449b2a06195ab
+control_headings.md,True,True,"12,591",PASS
+control_tables.md,True,True,"5,9606",PASS
+control_lists.md,True,True,"5,9892",PASS
+control_codeblocks.md,True,True,"5,9795",PASS
+missing_heading.md,False,False,"6,3727",PASS
+missing_table_row.md,False,False,"5,9623",PASS
+missing_list_item.md,False,False,"5,9765",PASS
+missing_codeblock.md,False,False,"5,966",PASS
+experiment_kubernetes.md,True,True,"6,0532",PASS
+experiment_ohmyzsh.md,True,True,"6,0447",PASS
+experiment_fastapi.md,True,True,"6,0442",PASS
