@@ -249,3 +249,11 @@ results/diffs/*
 
 !scripts/
 !scripts/setup_quality_gate.py
+
+# Allow data folders (LLM experiments)
+!data/
+!data/**
+
+# But ignore heavy/generated stuff if needed
+# data/llm-generated/*
+# data/external-sources/*

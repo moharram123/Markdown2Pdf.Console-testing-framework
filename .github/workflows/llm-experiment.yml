@@ -6,6 +6,9 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   llm-quality-gate:
     runs-on: ubuntu-latest
@@ -56,3 +59,16 @@ jobs:
             data/llm-generated/
             results/generated-pdfs/
             results/test-reports/
+
+      - name: Commit generated data and results
+        if: always() && github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add -f data/external-sources/
+          git add -f data/llm-generated/
+          git add -f results/
+
+          git commit -m "Update generated LLM data and results" || echo "No generated changes to commit"
+          git push
