@@ -1,61 +1,50 @@
-name: Automated PDF Quality Gate with LLM
+name: LLM Automated Quality Gate
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
-  schedule:
-    - cron: '0 2 * * *'  # Daily at 2 AM
 
 jobs:
-  test:
+  llm-quality-gate:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      
-      - name: Set up .NET
+          python-version: "3.12"
+
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
-      
-      - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install openai python-dotenv
-      
-      - name: Restore .NET Tools
+          dotnet-version: "8.0.x"
+
+      - name: Restore .NET tools
         run: dotnet tool restore
-      
-      - name: Setup Quality Gate
-        run: python scripts/setup_quality_gate.py
-      
-      - name: 📥 Download Markdown Sources
-        run: python scripts/download_markdown_sources.py
-      
-      - name: 🤖 Generate Test Cases with LLM
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-llm.txt
+
+      - name: Run full LLM automation pipeline
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: python llm_experiments/llm_test_case_generator.py
-      
-      - name: 🔍 Validate Generated Tests
-        run: python scripts/validate_generated_tests.py
-      
-      - name: 🧪 Run Complete Test Suite
-        run: pytest tests llm_experiments/generated_test_cases -v --html=results/test-reports/report.html --self-contained-html
-      
-      - name: 📊 Upload Test Report
+        run: python scripts/run_full_pipeline.py
+
+      - name: Upload LLM pipeline artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: llm-quality-gate-results
           path: |
-            results/test-reports/
+            data/external-sources/
+            data/llm-generated/
             results/generated-pdfs/
-            results/metrics/
+            results/test-reports/

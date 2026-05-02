@@ -1,14 +1,10 @@
 """
-LLM-assisted Markdown test case generator.
+Generate LLM-assisted Markdown test cases.
 
-This module generates additional Markdown control and regression test cases
-based on external Markdown input documents. Generated files are integrated
-into the automated test workflow for validation and execution.
+This script takes external Markdown files as input and uses an LLM to
+automatically generate control (valid) and regression (faulty) test cases.
 
-Usage:
-  pip install -r requirements-llm.txt
-  $env:OPENAI_API_KEY = "your-key-here"
-  python -m llm_assisted_generation.generate_llm_test_cases
+Each source file produces multiple variants to increase test coverage.
 """
 
 from pathlib import Path
@@ -20,14 +16,18 @@ from llm_assisted_generation.llm_test_case_generator import generate_markdown_pa
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SOURCE_DIR = BASE_DIR / "data" / "external-sources" / "downloaded"
-OUTPUT_DIR = BASE_DIR / "data" / "llm-generated"
 
+OUTPUT_DIR = BASE_DIR / "data" / "llm-generated"
 CONTROL_DIR = OUTPUT_DIR / "control"
 REGRESSION_DIR = OUTPUT_DIR / "regressions"
 
 
+# 🔥 Increase this to control number of test cases
+VARIANTS_PER_SOURCE = 3
+
+
 def main() -> None:
-    source_files = list(SOURCE_DIR.glob("*.md"))
+    source_files = sorted(SOURCE_DIR.glob("*.md"))
 
     if not source_files:
         print("No Markdown source files found.")
@@ -39,39 +39,66 @@ def main() -> None:
 
     client = get_llm_client()
 
-    print("Generating LLM-assisted Markdown test cases...")
+    print("=" * 60)
+    print("LLM TEST GENERATION")
+    print("=" * 60)
+
+    print(f"Sources found: {len(source_files)}")
+    print(f"Variants per source: {VARIANTS_PER_SOURCE}")
+    print(f"Expected total files: {len(source_files) * VARIANTS_PER_SOURCE * 2}")
+    print()
 
     generated_count = 0
+    skipped_count = 0
 
     for source_path in source_files:
-        name = source_path.stem
+        source_name = source_path.stem
 
-        print(f"Processing: {name}")
+        print(f"\nProcessing source: {source_name}")
 
         source_content = source_path.read_text(encoding="utf-8", errors="ignore")
 
-        control_path = CONTROL_DIR / f"llm_{name}_control.md"
-        regression_path = REGRESSION_DIR / f"llm_{name}_regression.md"
+        # 🔁 Generate multiple variants
+        for variant in range(1, VARIANTS_PER_SOURCE + 1):
+            case_name = f"{source_name}_v{variant}"
 
-        if control_path.exists() and regression_path.exists():
-            print(f"SKIPPED: {name} already generated")
-            continue
+            control_path = CONTROL_DIR / f"llm_{case_name}_control.md"
+            regression_path = REGRESSION_DIR / f"llm_{case_name}_regression.md"
 
-        try:
-            control, regression = generate_markdown_pair(client, source_content)
-        except Exception as error:
-            print(f"FAILED: {name} -> {error}")
-            continue
+            # Skip already generated files
+            if control_path.exists() and regression_path.exists():
+                skipped_count += 2
+                print(f"  SKIPPED: {case_name}")
+                continue
 
-        control_path.write_text(control, encoding="utf-8")
-        regression_path.write_text(regression, encoding="utf-8")
+            print(f"  Generating variant {variant}...")
 
-        print(f"SAVED: {control_path}")
-        print(f"SAVED: {regression_path}")
+            try:
+                control, regression = generate_markdown_pair(
+                    client=client,
+                    source_content=source_content,
+                    variant_number=variant,
+                )
+            except Exception as error:
+                print(f"  FAILED: {case_name} -> {error}")
+                continue
 
-        generated_count += 2
+            # Save files
+            control_path.write_text(control, encoding="utf-8")
+            regression_path.write_text(regression, encoding="utf-8")
 
-    print(f"Done. Generated {generated_count} LLM-assisted test file(s).")
+            generated_count += 2
+
+            print(f"  SAVED: {control_path.name}")
+            print(f"  SAVED: {regression_path.name}")
+
+    print("\n" + "=" * 60)
+    print("GENERATION SUMMARY")
+    print("=" * 60)
+    print(f"New files generated: {generated_count}")
+    print(f"Files skipped (already exist): {skipped_count}")
+    print(f"Control folder: {CONTROL_DIR}")
+    print(f"Regression folder: {REGRESSION_DIR}")
 
 
 if __name__ == "__main__":

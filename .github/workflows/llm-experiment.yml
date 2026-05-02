@@ -48,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: llm-experiment-results
-          path: results/llm-quality-check/
+          path: results/llm-quality-check/git status

@@ -2,23 +2,24 @@ from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 CONTROL_DIR = BASE_DIR / "data" / "llm-generated" / "control"
 REGRESSION_DIR = BASE_DIR / "data" / "llm-generated" / "regressions"
 
 
-def contains_heading(content: str) -> bool:
-    return any(line.startswith("#") for line in content.splitlines())
+def has_heading(content: str) -> bool:
+    return any(line.strip().startswith("#") for line in content.splitlines())
 
 
-def contains_table(content: str) -> bool:
+def has_table(content: str) -> bool:
     return "|" in content and "Name" in content and "Role" in content
 
 
-def contains_list(content: str) -> bool:
+def has_list(content: str) -> bool:
     return any(line.strip().startswith(("-", "*")) for line in content.splitlines())
 
 
-def contains_code_block(content: str) -> bool:
+def has_code_block(content: str) -> bool:
     return "```" in content
 
 
@@ -26,16 +27,16 @@ def check_control_file(path: Path) -> list[str]:
     content = path.read_text(encoding="utf-8", errors="ignore")
     errors = []
 
-    if not contains_heading(content):
+    if not has_heading(content):
         errors.append("missing heading")
 
-    if not contains_table(content):
+    if not has_table(content):
         errors.append("missing table")
 
-    if not contains_list(content):
+    if not has_list(content):
         errors.append("missing list")
 
-    if not contains_code_block(content):
+    if not has_code_block(content):
         errors.append("missing code block")
 
     return errors
@@ -55,7 +56,7 @@ def run_quality_check() -> bool:
 
     success = True
 
-    print("Running LLM quality check...")
+    print("Running LLM-generated file quality check...")
 
     for file in control_files:
         errors = check_control_file(file)
@@ -72,8 +73,10 @@ def run_quality_check() -> bool:
     return success
 
 
-if __name__ == "__main__":
-    passed = run_quality_check()
-
-    if not passed:
+def main() -> None:
+    if not run_quality_check():
         raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()

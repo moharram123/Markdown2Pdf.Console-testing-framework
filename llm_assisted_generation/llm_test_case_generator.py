@@ -1,182 +1,96 @@
-#!/usr/bin/env python3
 """
-Convert Markdown test cases to PDF generation tests.
-"""
-
-import re
-import json
-from pathlib import Path
-from datetime import datetime
-
-
-class MarkdownToPdfTestConverter:
-    def __init__(self):
-        self.markdown_dir = Path("data/generated_test_cases")
-        self.output_dir = Path("tests/generated_pdf_tests")
-        self.pdf_output_dir = Path("data/generated_pdfs")
-        self.metrics_dir = Path("results/metrics")
-        self.reports_dir = Path("results/test-reports")
-        
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.pdf_output_dir.mkdir(parents=True, exist_ok=True)
-        self.metrics_dir.mkdir(parents=True, exist_ok=True)
-        self.reports_dir.mkdir(parents=True, exist_ok=True)
-    
-    def sanitize_test_name(self, name):
-        """Convert test name to valid Python function name."""
-        clean_name = re.sub(r'[^\w\s]', '', name)
-        clean_name = clean_name.strip().lower().replace(' ', '_').replace('-', '_')
-        clean_name = re.sub(r'_+', '_', clean_name)
-        return clean_name[:40]
-    
-    def parse_markdown_tests(self, markdown_content):
-        """Parse Markdown test cases."""
-        tests = []
-        test_blocks = re.split(r'## Test Case \d+:', markdown_content)
-        
-        for block in test_blocks[1:]:
-            lines = block.strip().split('\n')
-            test_name = lines[0].strip() if lines else "unknown"
-            
-            markdown_match = re.search(r'### Input:\s*```markdown\n(.*?)\n```', block, re.DOTALL)
-            test_markdown = markdown_match.group(1) if markdown_match else ""
-            
-            expected_match = re.search(r'### Expected[^:]*:\n(.*?)(?=###|$)', block, re.DOTALL)
-            expected_elements = []
-            if expected_match:
-                for line in expected_match.group(1).split('\n'):
-                    line = line.strip()
-                    if line.startswith('- '):
-                        expected_elements.append(line[2:].strip('`'))
-            
-            if test_markdown.strip():
-                clean_content = re.sub(r'[-_\s]', '', test_markdown)
-                if len(clean_content) >= 3:
-                    sanitized_name = self.sanitize_test_name(test_name)
-                    tests.append({
-                        'name': test_name,
-                        'markdown': test_markdown,
-                        'expected': expected_elements,
-                        'sanitized_name': sanitized_name
-                    })
-        
-        return tests
-    
-    def generate_pytest_file(self, tests, source_name):
-        """Generate pytest file."""
-        pytest_code = f'''#!/usr/bin/env python3
-"""
-Generated PDF tests from Markdown.
+Prompt and generation logic for LLM-assisted Markdown test cases.
 """
 
-import pytest
-from pathlib import Path
 
+def build_generation_prompt(source_content: str, variant_number: int) -> str:
+    return f"""
+You are generating Markdown test cases for an automated Markdown-to-PDF integration test framework.
 
-class TestGeneratedPdfCases:
-    
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.pdf_dir = Path("data/generated_pdfs")
-        self.pdf_dir.mkdir(parents=True, exist_ok=True)
-'''
-        
-        for i, test in enumerate(tests, 1):
-            test_name = test['sanitized_name']
-            
-            pytest_code += f'''
-    def test_pdf_{i}_{test_name}(self):
-        """Test: {test['name']}"""
-        markdown_input = """
-{test['markdown']}
+Create one valid CONTROL Markdown file and one faulty REGRESSION Markdown file.
+
+Return exactly this format:
+
+---CONTROL---
+<valid markdown>
+
+---REGRESSION---
+<faulty markdown>
+
+CONTROL requirements:
+- It must be valid Markdown.
+- It must be realistic and based loosely on the source document.
+- It must contain at least 5 headings using #, ##, or ###.
+- It must contain one table with the columns Name and Role.
+- The table must include these rows: Alice, Bob, Carol, Dave, Admin.
+- It must contain one bullet list with at least 6 items.
+- The bullet list must include:
+  First item, Second item, Third item, Fourth item, Fifth item, Sixth item.
+- It must contain one Python code block containing both print( and def.
+- It must contain one JavaScript code block containing console.log.
+
+REGRESSION requirements:
+- It must be similar to the control file.
+- It must contain exactly one intentional structural defect.
+- Choose exactly one of these defects:
+  missing heading, missing table row, missing list item, or missing code block.
+- Do not explain the defect inside the Markdown file.
+
+Variation instruction:
+- This is variant number {variant_number}.
+- Make this variant meaningfully different from other variants.
+- Change the topic, heading names, list wording, and code examples while keeping the required validation elements.
+
+Important:
+- Output only the requested CONTROL and REGRESSION sections.
+- Do not include explanations before or after the generated Markdown.
+
+Source document excerpt:
+---
+{source_content[:2500]}
+---
 """.strip()
-        
-        expected = {test['expected']}
-        
-        assert markdown_input
-        assert len(markdown_input) > 3
-        
-        pdf = self.pdf_dir / f"test_{{str(i).zfill(3)}}.pdf"
-        with open(pdf, 'w') as f:
-            f.write(f"PDF\\nLength: {{len(markdown_input)}}\\n")
-'''
-        
-        return pytest_code
-    
-    def save_metrics(self, total):
-        """Save metrics."""
-        metrics = {
-            "total": total,
-            "generated_at": datetime.now().isoformat(),
-            "framework": "Markdown-to-PDF Testing"
-        }
-        
-        json_path = self.metrics_dir / "test_metrics.json"
-        with open(json_path, 'w') as f:
-            json.dump(metrics, f, indent=2)
-        
+
+
+def split_llm_response(content: str) -> tuple[str, str]:
+    if "---CONTROL---" not in content or "---REGRESSION---" not in content:
+        raise ValueError("LLM response does not contain CONTROL and REGRESSION markers.")
+
+    control = content.split("---CONTROL---", 1)[1].split("---REGRESSION---", 1)[0].strip()
+    regression = content.split("---REGRESSION---", 1)[1].strip()
+
+    if not control:
+        raise ValueError("Generated control content is empty.")
+
+    if not regression:
+        raise ValueError("Generated regression content is empty.")
+
+    return control, regression
+
+
+def generate_markdown_pair(client, source_content: str, variant_number: int = 1) -> tuple[str, str]:
+    for attempt in range(1, 4):
         try:
-            import openpyxl
-            wb = openpyxl.Workbook()
-            ws = wb.active
-            ws.append(["Metric", "Value"])
-            for k, v in metrics.items():
-                ws.append([k, str(v)])
-            wb.save(self.metrics_dir / "test_metrics.xlsx")
-        except:
-            pass
-    
-    def convert_all(self):
-        """Convert all files."""
-        files = list(self.markdown_dir.glob("tests_*.md"))
-        
-        if not files:
-            return 0
-        
-        print(f"Converting {len(files)} files...\n")
-        
-        total = 0
-        
-        for fp in files:
-            print(f"Converting: {fp.name}")
-            
-            with open(fp, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            tests = self.parse_markdown_tests(content)
-            
-            if tests:
-                code = self.generate_pytest_file(tests, fp.stem)
-                
-                out = f"test_{fp.stem}.py"
-                out_path = self.output_dir / out
-                
-                with open(out_path, 'w') as f:
-                    f.write(code)
-                
-                total += len(tests)
-                print(f"  Created: {out} ({len(tests)} tests)\n")
-        
-        if total > 0:
-            self.save_metrics(total)
-        
-        return total
+            response = client.chat.completions.create(
+                model="gpt-4.1-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You generate raw Markdown test cases for automated PDF validation.",
+                    },
+                    {
+                        "role": "user",
+                        "content": build_generation_prompt(source_content, variant_number),
+                    },
+                ],
+                temperature=0.6,
+                max_tokens=2500,
+            )
 
+            content = response.choices[0].message.content.strip()
+            return split_llm_response(content)
 
-def main():
-    print("=" * 60)
-    print("Converting to PDF Tests")
-    print("=" * 60)
-    print()
-    
-    converter = MarkdownToPdfTestConverter()
-    total = converter.convert_all()
-    
-    if total > 0:
-        print(f"\nComplete! {total} tests")
-    else:
-        print("\nNo tests")
+        except Exception as error:
+            print(f"Attempt {attempt} failed: {error}")
 
-
-if __name__ == "__main__":
-    main()
+    raise RuntimeError("LLM generation failed after 3 attempts.")
