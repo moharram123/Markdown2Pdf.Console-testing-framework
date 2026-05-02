@@ -47,6 +47,11 @@ def main() -> None:
         ],
     )
 
+    run_step(
+        "Generate Excel metrics",
+        [sys.executable, "scripts/convert_metrics_to_excel.py"],
+    )
+
     print("\nPipeline completed successfully.")
 
 

@@ -59,6 +59,7 @@ jobs:
             data/llm-generated/
             results/generated-pdfs/
             results/test-reports/
+            results/metrics/
 
       - name: Commit generated data and results
         if: always()
