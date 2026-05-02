@@ -44,7 +44,7 @@ class MarkdownToPdfTestConverter:
                     official_tests.append({
                         'name': test_name,
                         'markdown': mk_markdown,
-                        'expected': electrons_list,
+                        'expected': [],
                         'sanitized_name': sanitized_name
                     })
                 else:
