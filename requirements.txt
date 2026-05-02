@@ -3,3 +3,4 @@ pytest-html
 pdfplumber
 pdfminer.six
 requests
+openpyxl
