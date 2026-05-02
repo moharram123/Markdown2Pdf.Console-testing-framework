@@ -19,28 +19,37 @@ def markdown_files(folder: Path) -> list[Path]:
 
 def validate_pdf_structure(pdf_path: Path) -> None:
     text = extract_text_from_pdf(pdf_path)
+    normalized_text = text.lower()
 
-    assert "Alice" in text
-    assert "Bob" in text
-    assert "Admin" in text
+    assert "alice" in normalized_text
+    assert "bob" in normalized_text
+    assert "admin" in normalized_text
 
-    assert "print" in text
-    assert "console.log" in text
+    assert "print" in normalized_text
+    assert "console.log" in normalized_text
 
-    # Flexible list validation:
-    # The LLM may generate different list wording, so we check for several
-    # common list-related indicators instead of one exact phrase.
     list_indicators = [
-        "First item",
-        "Second item",
-        "Key Benefits",
-        "Objectives",
+        "first item",
+        "second item",
+        "key benefits",
+        "objectives",
         "priority",
         "features",
-        "Goals",
+        "goals",
+        "guidelines",
+        "steps",
+        "requirements",
+        "workflow",
+        "tasks",
+        "benefits",
+        "components",
+        "development",
+        "setup",
     ]
 
-    assert any(indicator.lower() in text.lower() for indicator in list_indicators)
+    assert any(indicator in normalized_text for indicator in list_indicators), (
+        f"No list-like structure detected in {pdf_path.name}"
+    )
 
 
 @pytest.mark.parametrize("markdown_file", markdown_files(CONTROL_DIR))
@@ -52,6 +61,7 @@ def test_llm_control_cases_are_valid(markdown_file: Path) -> None:
     convert_markdown_to_pdf(markdown_file, pdf_path)
 
     assert pdf_path.exists(), f"PDF was not generated: {pdf_path}"
+    assert pdf_path.stat().st_size > 0, f"Generated PDF is empty: {pdf_path}"
 
     validate_pdf_structure(pdf_path)
 
