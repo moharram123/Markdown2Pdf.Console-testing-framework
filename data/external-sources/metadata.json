@@ -1,0 +1,79 @@
+[
+  {
+    "name": "mermaid_js_mermaid",
+    "repository": "mermaid-js/mermaid",
+    "stars": 87768,
+    "url": "https://raw.githubusercontent.com/mermaid-js/mermaid/develop/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/mermaid_js_mermaid.md"
+  },
+  {
+    "name": "docsifyjs_docsify",
+    "repository": "docsifyjs/docsify",
+    "stars": 31184,
+    "url": "https://raw.githubusercontent.com/docsifyjs/docsify/develop/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/docsifyjs_docsify.md"
+  },
+  {
+    "name": "gitbookio_gitbook",
+    "repository": "GitbookIO/gitbook",
+    "stars": 28818,
+    "url": "https://raw.githubusercontent.com/GitbookIO/gitbook/main/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/gitbookio_gitbook.md"
+  },
+  {
+    "name": "requarks_wiki",
+    "repository": "requarks/wiki",
+    "stars": 28257,
+    "url": "https://raw.githubusercontent.com/requarks/wiki/main/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/requarks_wiki.md"
+  },
+  {
+    "name": "mkdocs_mkdocs",
+    "repository": "mkdocs/mkdocs",
+    "stars": 22039,
+    "url": "https://raw.githubusercontent.com/mkdocs/mkdocs/master/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/mkdocs_mkdocs.md"
+  },
+  {
+    "name": "nhn_tui_editor",
+    "repository": "nhn/tui.editor",
+    "stars": 17936,
+    "url": "https://raw.githubusercontent.com/nhn/tui.editor/master/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/nhn_tui_editor.md"
+  },
+  {
+    "name": "sparanoid_chinese_copywriting_guidelines",
+    "repository": "sparanoid/chinese-copywriting-guidelines",
+    "stars": 15320,
+    "url": "https://raw.githubusercontent.com/sparanoid/chinese-copywriting-guidelines/master/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/sparanoid_chinese_copywriting_guidelines.md"
+  },
+  {
+    "name": "pandao_editor_md",
+    "repository": "pandao/editor.md",
+    "stars": 14305,
+    "url": "https://raw.githubusercontent.com/pandao/editor.md/master/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/pandao_editor_md.md"
+  },
+  {
+    "name": "gollum_gollum",
+    "repository": "gollum/gollum",
+    "stars": 14269,
+    "url": "https://raw.githubusercontent.com/gollum/gollum/master/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/gollum_gollum.md"
+  },
+  {
+    "name": "iamgio_quarkdown",
+    "repository": "iamgio/quarkdown",
+    "stars": 13446,
+    "url": "https://raw.githubusercontent.com/iamgio/quarkdown/main/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/iamgio_quarkdown.md"
+  },
+  {
+    "name": "satwikkansal_wtfpython",
+    "repository": "satwikkansal/wtfpython",
+    "stars": 36923,
+    "url": "https://raw.githubusercontent.com/satwikkansal/wtfpython/master/README.md",
+    "local_file": "/home/runner/work/Markdown2Pdf.Console-testing-framework/Markdown2Pdf.Console-testing-framework/data/external-sources/downloaded/satwikkansal_wtfpython.md"
+  }
+]
