@@ -61,7 +61,7 @@ jobs:
             results/test-reports/
 
       - name: Commit generated data and results
-        if: always() && github.event_name != 'pull_request'
+        if: success() && github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
