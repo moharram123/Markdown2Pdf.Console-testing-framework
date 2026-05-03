@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 import sys
@@ -11,16 +12,11 @@ GENERATED_FOLDERS = [
 ]
 
 
+def get_run_mode() -> str:
+    return "dynamic" if os.getenv("CLEAN_RUN", "false").lower() == "true" else "static"
+
+
 def clean_generated_outputs() -> None:
-    """
-    Remove generated input, output, and result folders before each pipeline run.
-
-    This makes every execution start from a clean state:
-    - new external Markdown files are downloaded
-    - new LLM test cases are generated
-    - new PDFs, reports, and Excel metrics are created
-    """
-
     print("\n" + "=" * 60)
     print("Clean generated folders")
     print("=" * 60)
@@ -46,11 +42,20 @@ def run_step(title: str, command: list[str]) -> None:
 
 
 def main() -> None:
+    mode = get_run_mode()
+
     print("=" * 60)
     print("FULL AUTOMATED LLM TESTING PIPELINE")
     print("=" * 60)
+    print(f"Run mode: {mode.upper()}")
 
-    clean_generated_outputs()
+    if mode == "dynamic":
+        clean_generated_outputs()
+    else:
+        print("\nRunning in STATIC mode.")
+        print("Existing generated files will be reused if available.")
+
+    report_path = f"results/test-reports/{mode}/llm-report.html"
 
     run_step(
         "Download external Markdown sources",
@@ -75,7 +80,7 @@ def main() -> None:
             "pytest",
             "tests/test_llm_generated_cases.py",
             "-v",
-            "--html=results/test-reports/llm-report.html",
+            f"--html={report_path}",
             "--self-contained-html",
         ],
     )

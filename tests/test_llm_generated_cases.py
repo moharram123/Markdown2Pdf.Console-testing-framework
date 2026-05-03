@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pytest
@@ -10,7 +11,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 CONTROL_DIR = BASE_DIR / "data" / "llm-generated" / "control"
 REGRESSION_DIR = BASE_DIR / "data" / "llm-generated" / "regressions"
-PDF_OUTPUT_DIR = BASE_DIR / "results" / "generated-pdfs" / "llm"
+
+
+def get_run_mode() -> str:
+    return "dynamic" if os.getenv("CLEAN_RUN", "false").lower() == "true" else "static"
+
+
+PDF_OUTPUT_DIR = BASE_DIR / "results" / "generated-pdfs" / get_run_mode()
 
 
 def markdown_files(folder: Path) -> list[Path]:
