@@ -1,206 +1,273 @@
-# Automated Integration Test Framework for Markdown2Pdf.Console
+# LLM-Driven Quality Gate for Markdown2Pdf.Console
 
-This repository contains a testing framework developed as part of a Bachelor thesis: **Design and Evaluation of an Automated Integration Test Suite for Markdown2Pdf.Console**
+This repository is part of a Bachelor thesis project that explores how large language models can automate the testing process for PDF generation tools. The system automatically generates test cases, runs them through a conversion pipeline, and validates the output against expected quality standards.
 
-The project focuses on validating PDF documents generated from Markdown and detecting structural issues in a consistent and reproducible way.
+## What This Project Does
 
-## Project Goal
+Markdown2Pdf.Console is a command-line tool that converts Markdown files into PDF documents. While the tool works well, there has been no systematic way to catch regressions or validate output quality at scale. This project builds an automated quality gate that uses OpenAI's API to generate diverse test cases and validate PDF outputs in a CI/CD pipeline.
 
-Markdown2Pdf.Console is a command-line tool that converts Markdown files into PDF documents. In many workflows, generated PDFs are not automatically checked, which means errors can go unnoticed.
+The system works in three main phases:
 
-The goal of this project is to:
-* Automatically validate generated PDF documents
-* Detect structural regressions (missing or broken elements)
-* Use a simple baseline comparison approach
-* Integrate testing into a CI/CD pipeline as a quality gate
+1. **Discovery**: Automatically searches GitHub for real-world Markdown documentation from popular open-source projects
+2. **Generation**: Uses an LLM to create both control cases (valid Markdown that should pass) and regression cases (intentionally broken Markdown that should fail)
+3. **Validation**: Converts all test cases to PDF, extracts text content, and checks whether the conversion preserved the expected structure
 
-## System Under Test
+## Current Test Corpus
 
-* **Tool:** Markdown2Pdf.Console
-* **Version:** 2.0.2
-* **Execution:** CLI (`dotnet tool run md2pdf`)
+The latest pipeline run generated test cases from 11 real-world Markdown sources:
 
-The converter is treated as an external system (black-box). This repository focuses only on testing and validation.
+- docsify.js documentation
+- GitBook documentation  
+- Gollum wiki
+- Quarkdown documentation
+- Mermaid.js documentation
+- MkDocs documentation
+- TUI Editor documentation
+- Editor.md documentation
+- Requarks Wiki documentation
+- WTFPython examples
+- Chinese Copywriting Guidelines
 
-## Project Structure
+For each source, the LLM creates 3 control variants and 3 regression variants, resulting in:
+- **33 control test cases** (expected to pass)
+- **33 regression test cases** (expected to detect issues)
+- **66 total test files** per pipeline run
+
+## How The System Works
+
+### Architecture
 
 ```
-Markdown2Pdf.Console-testing-framework/
-│
-├── data/
-│   ├── pilot/          # Valid Markdown files (control cases)
-│   ├── regressions/    # Faulty Markdown files (regression cases)
-│   └── baselines/      # Expected structures (JSON)
-│
-├── results/
-│   ├── generated-pdfs/ # Generated PDF files
-│   ├── test-reports/   # HTML reports
-│   ├── metrics/        # Evaluation outputs
-│   └── diffs/          # Per-case comparison results
-│
-├── tests/
-│   ├── test_auto_conversion.py
-│   ├── system_adapter.py
-│   ├── pdf_text_extractor.py
-│   ├── baseline_comparator.py
-│   └── evaluation_metrics.py
-│
-├── validation_rules/            # Validation logic for structure checks
-├── scripts/                     # Automation and setup scripts
-├── llm_experiments/             # Optional LLM experiment module (not part of core suite)
-├── requirements.txt
-├── requirements-llm.txt
-└── pytest.ini
+data/
+├── external-sources/
+│   ├── downloaded/          # 11 real Markdown files from GitHub
+│   └── metadata.json        # Source tracking
+└── llm-generated/
+    ├── control/             # 33 LLM-generated valid test cases  
+    └── regressions/         # 33 LLM-generated defect cases
+
+llm_assisted_generation/
+├── external_markdown.py      # GitHub discovery and download
+├── generate_llm_test_cases.py # LLM-based test generation
+├── llm_client.py            # OpenAI API integration
+├── llm_quality_check.py     # Pre-test validation
+└── run_llm_tests.py         # Test execution orchestration
+
+tests/
+└── test_llm_generated_cases.py # Pytest validation logic
+
+scripts/
+├── run_full_pipeline.py     # Main automation script
+├── convert_metrics_to_excel.py # Reporting
+└── cleanup.py               # Reset generated data
+
+results/
+├── generated-pdfs/          # Converted PDF outputs  
+├── metrics/                 # CSV test results
+└── test-reports/            # HTML pytest reports
 ```
 
-## Test Concept
+### Pipeline Execution
 
-The framework checks four basic Markdown structures in the generated PDFs:
-* Headings
-* Tables
-* Lists
-* Code blocks
+The GitHub Actions workflow runs two modes:
 
-### Control Cases
+**Static Mode** (CLEAN_RUN=false):
+- Reuses existing generated test files
+- Faster execution for quick validation
+- Useful for testing pipeline changes without regenerating
 
-Valid Markdown files expected to pass all tests.
+**Dynamic Mode** (CLEAN_RUN=true):
+- Cleans all generated folders first
+- Downloads fresh Markdown sources
+- Generates new LLM test cases
+- Full end-to-end validation
 
-### Regression Cases
+Each pipeline run takes approximately 16 minutes:
+- Static pipeline: ~7 minutes
+- Dynamic pipeline: ~9 minutes  
+- Setup and artifact upload: ~30 seconds
 
-Files with intentional defects (missing heading, table row, list item, code block).
+### Test Validation Logic
 
-## Baseline Mechanism
+The system validates four Markdown structures in generated PDFs:
+- Headings
+- Tables  
+- Lists
+- Code blocks
 
-Each control file has a corresponding JSON baseline:
+Test results are evaluated against thresholds:
+- **Control cases**: Must achieve 90% pass rate
+- **Regression detection**: Must catch 85% of intentional defects
 
-```json
-{
-  "headings": ["Features"],
-  "lists": ["Item 1", "Item 2", "Item 3"]
-}
-```
+Results are logged to CSV files in `results/metrics/` with per-test details including:
+- Test name and category
+- Pass/fail status
+- Execution timestamp
+- Detected vs expected structures
 
-**Test process:**
-1. Convert Markdown to PDF
-2. Extract text from the PDF
-3. Apply validation rules
-4. Compare with baseline
-5. Store differences and results
+## Running The System Locally
 
-## Automated Quality Gate Setup
+### Prerequisites
 
-The repository includes a setup script that checks the project structure before running tests:
+- Python 3.12+
+- .NET 8.0 SDK
+- OpenAI API key
+
+### Setup
 
 ```bash
-python scripts/setup_quality_gate.py
-```
-
-The script verifies that all required folders and files exist and creates missing folders.
-It runs fully offline and does not overwrite existing files.
-
-## How the Quality Gate Works
-
-The CI/CD pipeline follows four steps:
-
-1. **Setup** — `setup_quality_gate.py` verifies the project structure
-2. **Test** — Pytest runs all control and regression tests
-3. **Report** — HTML reports and metrics are generated and uploaded as artifacts
-4. **Quality Gate** — The workflow fails if any test fails
-
-## How to Run
-
-### 1. Install dependencies
-
-```bash
+# Install .NET tools
 dotnet tool restore
+dotnet tool install --global Markdown2Pdf.Console --version 2.0.2
+
+# Install Python dependencies
 pip install -r requirements.txt
-```
-
-### 2. Run the setup script
-
-```bash
-python scripts/setup_quality_gate.py
-```
-
-### 3. Run tests
-
-```bash
-pytest tests --html=results/test-reports/report.html --self-contained-html
-```
-
-## Output
-
-* PDFs → `results/generated-pdfs/`
-* Report → `results/test-reports/report.html`
-* Metrics → `results/metrics/`
-* Diffs → `results/diffs/`
-
-## Evaluation
-
-The framework provides four evaluation metrics:
-
-* Regression detection accuracy
-* False positive rate
-* Execution time
-* Estimated time savings compared to manual validation
-
-## Optional LLM-Assisted Test Enrichment
-
-An experimental module is included in `llm_experiments/` that uses the OpenAI API to generate additional Markdown test cases. This can help expand the test corpus with diverse edge cases for validation.
-
-To use it:
-
-```bash
 pip install -r requirements-llm.txt
-export OPENAI_API_KEY=your_key
-python llm_experiments/generate_llm_test_cases.py --count 20
+
+# Set your OpenAI API key
+export OPENAI_API_KEY="your-key-here"
 ```
 
-Important notes:
+### Run Complete Pipeline
 
-* LLM is **optional** — the core system works without it
-* LLM is **experimental** — it is not required for the thesis results
-* LLM is used to **generate additional Markdown test cases**, not to evaluate PDFs
-* LLM is **not part of CI/CD** — the pipeline runs without any LLM step
-* LLM outputs are **non-deterministic** — the same input may produce different results
+```bash
+# Dynamic mode (regenerates everything)
+export CLEAN_RUN="true"
+python scripts/run_full_pipeline.py
+
+# Static mode (reuses existing files)
+export CLEAN_RUN="false"
+python scripts/run_full_pipeline.py
+```
+
+### Run Individual Steps
+
+```bash
+# Download external Markdown sources
+python -m llm_assisted_generation.external_markdown
+
+# Generate test cases
+python -m llm_assisted_generation.generate_llm_test_cases
+
+# Run quality checks
+python -m llm_assisted_generation.llm_quality_check
+
+# Execute tests
+pytest tests/test_llm_generated_cases.py -v
+
+# Generate Excel reports
+python scripts/convert_metrics_to_excel.py
+```
+
+### Clean Generated Data
+
+```bash
+python scripts/cleanup.py
+```
+
+This removes all generated test files, PDFs, and metrics while preserving the core framework.
 
 ## CI/CD Integration
 
-GitHub Actions is configured to run the test suite on every push and pull request.
-The workflow installs dependencies, runs the setup script, executes all tests, and uploads results as artifacts.
-A failing test causes the workflow to fail, enforcing the quality gate.
+The GitHub Actions workflow (`.github/workflows/llm-experiment.yml`) runs automatically on every push to main. It:
 
-## Core Automated Integration Test Suite
+1. Sets up Python 3.12 and .NET 8.0
+2. Installs all dependencies
+3. Runs static pipeline (reuses existing test files)
+4. Runs dynamic pipeline (generates fresh test cases)
+5. Uploads all artifacts (test cases, PDFs, metrics, reports)
+6. Fails if test thresholds are not met
 
-The main contribution of this project is a deterministic test suite that runs fully offline:
-
-1. Convert Markdown to PDF using the CLI tool
-2. Extract text using `pdfminer.six`
-3. Apply rule-based validation
-4. Compare with baseline
-5. Export results and metrics
+The workflow uses GitHub Secrets to securely store the OpenAI API key.
 
 ## Design Decisions
 
-* Black-box approach — the converter is treated as an external system
-* Text structure validation — the focus is on content, not visual layout
-* Simple baseline mechanism — each control file has a JSON baseline
-* Stability and reproducibility — the test suite is deterministic and offline
+### Why LLM-Based Test Generation?
 
-## Limitations
+Manually creating dozens of test cases with controlled variations is time-consuming and limits diversity. By using an LLM to generate test cases from real-world Markdown sources, we get:
 
-* No visual PDF validation
-* Only a subset of Markdown features is tested
-* Baseline comparison is simplified
-* Results depend on text extraction quality
+- **Scale**: Generate 66 test cases in minutes instead of hours
+- **Diversity**: Each LLM variant introduces different edge cases
+- **Real-world relevance**: Test cases based on actual documentation
+- **Continuous freshness**: New test cases on every dynamic run
 
-## Current Status
+### Why Not Use LLM for PDF Validation?
 
-* Control and regression tests are working
-* PDF validation is stable
-* Metrics are generated
-* CI/CD pipeline is running
+While LLMs generate the test cases, the actual PDF validation uses deterministic rule-based logic. This is intentional:
 
-**Author:** Assia Moharram
+- **Reproducibility**: Same input always gives same validation result
+- **Cost**: No API calls during test execution
+- **Speed**: Text extraction and rule checking is fast
+- **Transparency**: Clear pass/fail criteria without black-box decisions
 
-**Note:** Bachelor thesis in Business Informatics (Design Science Research).
+### Black-Box Testing Approach
+
+The framework treats Markdown2Pdf.Console as an external system. We do not modify its source code or access internal state. This makes the framework:
+
+- **Portable**: Can be adapted for other Markdown-to-PDF converters
+- **Maintainable**: No coupling to converter internals
+- **Realistic**: Tests the tool as users would experience it
+
+## Known Limitations
+
+- **Visual validation**: The system only checks text content, not layout, fonts, or styling
+- **LLM non-determinism**: Test case generation varies between runs
+- **API dependency**: Requires active OpenAI API key and credits
+- **Cost**: Dynamic runs consume API tokens (estimated $0.10-0.30 per run)
+- **Limited Markdown features**: Currently validates only 4 structure types
+- **Text extraction quality**: Results depend on pdfminer.six accuracy
+
+## Performance Metrics
+
+Based on the most recent successful run:
+
+- Total workflow time: 16 minutes 17 seconds
+- Test cases generated: 66 (33 control + 33 regression)
+- External sources processed: 11 GitHub repositories  
+- Pipeline success rate: 100% (both static and dynamic)
+- Average control case pass rate: >90%
+- Average regression detection rate: >85%
+
+## Project Structure Summary
+
+```
+Markdown2Pdf.Console-testing-framework/
+├── .github/workflows/
+│   └── llm-experiment.yml       # CI/CD pipeline definition
+├── data/                        # Test data (git-ignored after generation)
+├── llm_assisted_generation/     # LLM integration modules
+├── tests/                       # Pytest test suite
+├── scripts/                     # Automation utilities
+├── results/                     # Generated outputs (git-ignored)
+├── requirements.txt             # Core Python dependencies
+├── requirements-llm.txt         # LLM-specific dependencies
+└── pytest.ini                   # Pytest configuration
+```
+
+## Contributing
+
+This is a thesis project, but improvements are welcome:
+
+- Add validation for additional Markdown structures
+- Optimize LLM prompts for better test case quality  
+- Implement visual PDF validation
+- Add support for other PDF converters
+- Improve error handling and logging
+
+## Thesis Context
+
+**Title**: Design and Evaluation of an Automated Integration Test Suite for Markdown2Pdf.Console
+
+**Institution**: Hochschule Trier
+
+**Program**: Bachelor of Science in Business Informatics
+
+**Author**: Assia Moharram
+
+**Research Approach**: Design Science Research
+
+The thesis investigates whether LLM-driven test generation can provide comparable quality assurance to manually crafted test suites while significantly reducing human effort. The framework serves as both the artifact and the evaluation platform for this research question.
+
+## License
+
+MIT License - see LICENSE file for details.
