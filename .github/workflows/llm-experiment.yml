@@ -41,9 +41,16 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-llm.txt
 
-      - name: Run full automated LLM pipeline
+      - name: Run static pipeline
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLEAN_RUN: "false"
+        run: python scripts/run_full_pipeline.py
+
+      - name: Run dynamic pipeline
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLEAN_RUN: "true"
         run: python scripts/run_full_pipeline.py
 
       - name: Upload LLM pipeline artifacts
@@ -54,6 +61,4 @@ jobs:
           path: |
             data/external-sources/
             data/llm-generated/
-            results/generated-pdfs/
-            results/test-reports/
-            results/metrics/
+            results/

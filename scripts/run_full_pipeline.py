@@ -8,7 +8,6 @@ from pathlib import Path
 GENERATED_FOLDERS = [
     Path("data/external-sources"),
     Path("data/llm-generated"),
-    Path("results"),
 ]
 
 
